@@ -10,6 +10,9 @@ const {
     getDocs,
     updateDoc,
     deleteDoc,
+    orderBy,
+    query,
+    limit
 } = require('firebase/firestore');
 
 const db = getFirestore(firebaseApp);
@@ -25,12 +28,11 @@ async function getDataFromAPI(Api) {
     }
 }
 
-async function addDataToAdafruit(Api,value){
+async function addDataToAdafruit(Api, value) {
     try {
         const response = await axios.post(Api, {
             value: value
         });
-        return response.data.last_value;
     } catch (error) {
         console.error('Error fetching data:', error);
         throw error;
@@ -47,8 +49,14 @@ exports.Index = async function (req, res) {
         const humidity_lastvalue = await getDataFromAPI('https://io.adafruit.com/api/v2/thanhdanh2754/feeds/humidx/');
         const lightvalue_lastvalue = await getDataFromAPI('https://io.adafruit.com/api/v2/thanhdanh2754/feeds/lightx/');
 
+
+        const currentTime = new Date();
+
+        // Convert the current time to GMT+7
+        const gmtPlus7Time = new Date(currentTime.getTime() + (7 * 60 * 60 * 1000));
+
         const record = {
-            time: new Date().toISOString(),
+            time: gmtPlus7Time.toISOString(),
             temp: temp_lastvalue,
             light: light_lastvalue,
             humidity: humidity_lastvalue,
@@ -58,13 +66,14 @@ exports.Index = async function (req, res) {
         await addDoc(collection(db, 'record'), record);
 
         //retrieve data from firebase
-        const records = await getDocs(collection(db, 'record'));
+        const recordRef = collection(db, 'record');
+        const q = query(recordRef, orderBy('time', 'desc'), limit(1));
+        const records = await getDocs(q);
         const recordArray = [];
         if (records.empty) {
             res.status(400).send('No records found');
         } else {
             records.forEach((doc) => {
-                //console.log(doc.data());
                 const record = new Record(
                     time = doc.data().time,
                     doc.data().temp,
@@ -75,7 +84,7 @@ exports.Index = async function (req, res) {
                 )
                 recordArray.push(record);
             });
-            res.status(200).send(recordArray);
+            res.status(200).send(recordArray[recordArray.length - 1]);
         }
     } catch (error) {
         res.status(400).send(error.message);
@@ -86,10 +95,14 @@ exports.Index = async function (req, res) {
 exports.Store = async function (req, res) {
     try {
         const data = req.body;
-        //add data to adafruit
-        await addDataToAdafruit('https://io.adafruit.com/api/v2/webhooks/feed/sUs7BVXhmMBCrh6kJcvMiYEwpqAv', data.fan);
-        await addDataToAdafruit('https://io.adafruit.com/api/v2/webhooks/feed/EV7Kr8ULbGybCr8BVufY11GMJ6eB', data.light);
 
+        //add data to adafruit
+        if (!(data.light === undefined)) {
+            await addDataToAdafruit('https://io.adafruit.com/api/v2/webhooks/feed/EV7Kr8ULbGybCr8BVufY11GMJ6eB', data.light);
+        }
+        if (!(data.fan === undefined)) {
+            await addDataToAdafruit('https://io.adafruit.com/api/v2/webhooks/feed/sUs7BVXhmMBCrh6kJcvMiYEwpqAv', data.fan);
+        }
         //add data to firebase
         await addDoc(collection(db, 'record'), data);
         res.status(200).send('record created successfully');

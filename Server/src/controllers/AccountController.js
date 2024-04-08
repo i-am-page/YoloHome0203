@@ -27,7 +27,6 @@ exports.Login = async function (req, res) {
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {
-            console.log("No matching documents.");
             res.status(400).send('No matching documents');
         } else {
             const accountSnap = querySnapshot.docs[0];

@@ -1,0 +1,23 @@
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "host": "vite --host"
+  },
+  "dependencies": {
+    "vue": "^3.4.21",
+    "axios": "^1.5.0",
+    "flowbite": "^1.8.1",
+    "moment": "^2.29.4",
+    "node-notifier": "^10.0.1",
+    "vue-router": "^4.2.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.3.4",
+    "autoprefixer": "^10.4.15",
+    "postcss": "^8.4.30",
+    "tailwindcss": "^3.3.3",
+    "vite": "^4.4.9"
+}
+}
