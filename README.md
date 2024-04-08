@@ -2,7 +2,7 @@
 
 ## Server Folder
 
-This repository contains the server code for YoloHome0203.
+This repository contains the server code and web client for YoloHome0203.
 
 ## Installation
 
@@ -15,7 +15,7 @@ This repository contains the server code for YoloHome0203.
 2. Navigate to the server folder:
 
    ```bash
-   cd server
+   cd Server
    ```
 
 3. Install the dependencies:
@@ -24,10 +24,28 @@ This repository contains the server code for YoloHome0203.
    npm install
    ```
 
+4. Navigate to the web client folder:
+
+   ```bash
+   cd Webclient
+   ```
+
+5. Install the dependencies:
+
+   ```bash
+   npm install
+   ```
+
 ## Usage
 
-To start the server, run the following command:
+1.To start the server, run the following command:
 
 ```bash
 npm run start
+```
+
+2.To start the web, run the following command:
+
+```bash
+npm run dev
 ```
