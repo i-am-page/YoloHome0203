@@ -86,18 +86,29 @@ export default {
         this.getData();
         this.interval = setInterval(() => {
             this.getData();
-        }, 20000);
+        }, 2000);
     },
     beforeDestroy() {
         clearInterval(this.interval);
     },
     methods: {
         async getData() {
-            const res = await axios.get("/record");
-            this.Data = await res.data
+            try {
+                const res = await axios.get("/record");
+                
+                this.Data = await res.data;
+            } catch (error) {
+                if (error.response && error.response.status === 401) {
+                    this.$router.push("/unauthorized");
+                } else {
+                    // Log any other errors to the console
+                    console.log(error);
+                }
+            }
+
         },
         async switchLight() {
-            const val = this.Data.fan == 0 ? 1 : 0;
+            const val = this.Data.light == 0 ? 1 : 0;
             console.log(val);
             const res = await axios.post("/record/store", {
                 light: val

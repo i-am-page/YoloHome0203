@@ -37,20 +37,29 @@ import Inputa from "../components/InputField.vue";
 import axios from "../fetch/axios";
 
 export default {
-    username: "",
-    password: "",
-    methods: {
-        async login() {
-            const res = await axios.post("/account/login", {
-                username: this.username,
-                password: this.password,
-            });
-            if (res.data === "Login successfully") {
-                this.$router.push("/dashboard");
-            } else {
-                alert("Sai tài khoản hoặc mật khẩu");
-            }
-        },
+  username: "",
+  password: "",
+  methods: {
+    async login() {
+      try {
+        const res = await axios.post("/account/authenticate", {
+          username: this.username,
+          password: this.password,
+        });
+        if (res.data && res.data.token) {
+          //localStorage.setItem("token", res.data);
+          axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
+          this.$router.push("/dashboard");
+        } else {
+          alert("Something wrong!");
+        }
+      }
+      catch (error) {
+        if (error.response && error.response.status === 400) {
+          alert("Invalid username or password");
+        }
+      }
     },
+  },
 };
 </script>
