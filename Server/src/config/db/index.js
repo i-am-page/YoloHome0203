@@ -2,16 +2,6 @@ const { initializeApp } = require('firebase/compat/app');
 const { getFirestore } = require('firebase/compat/firestore');
 const firebase = require('firebase/compat/app');
 
-
-//
-//import { initializeApp } from 'firebase/app';
-//import config from './config.js';
-
-//const firebase = initializeApp(config.firebaseConfig);
-
-//export default firebase;
-
-//
 const firebaseConfig = {
     apiKey: "AIzaSyDixhK_PVqi1VZcXm6byBsLlsxMq_b_RXk",
     authDomain: "dadn-yolohome0203.firebaseapp.com",

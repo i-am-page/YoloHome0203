@@ -42,6 +42,7 @@ async function addDataToAdafruit(Api, value) {
 
 exports.Index = async function (req, res) {
     try {
+        console.log("i went here")
         //load data from adafruit to firebase
         const fan_lastvalue = await getDataFromAPI('https://io.adafruit.com/api/v2/thanhdanh2754/feeds/fan/');
         const light_lastvalue = await getDataFromAPI('https://io.adafruit.com/api/v2/thanhdanh2754/feeds/light/');
@@ -90,7 +91,6 @@ exports.Index = async function (req, res) {
         res.status(400).send(error.message);
     }
 }
-
 
 exports.Store = async function (req, res) {
     try {
