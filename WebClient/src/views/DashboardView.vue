@@ -94,16 +94,11 @@ export default {
     methods: {
         async getData() {
             try {
-                const res = await axios.get("/record");
-                
+                const res = await axios.get("/record",
+                    { headers: { authorization: `Bearer ${localStorage.getItem("token")}` } });
                 this.Data = await res.data;
             } catch (error) {
-                if (error.response && error.response.status === 401) {
-                    this.$router.push("/unauthorized");
-                } else {
-                    // Log any other errors to the console
-                    console.log(error);
-                }
+                this.$router.push("/unauthorized");
             }
 
         },

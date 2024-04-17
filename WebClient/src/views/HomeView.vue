@@ -39,6 +39,10 @@ import axios from "../fetch/axios";
 export default {
   username: "",
   password: "",
+  mounted(){
+    localStorage.removeItem("token");
+    console.log(localStorage)
+  },
   methods: {
     async login() {
       try {
@@ -47,8 +51,8 @@ export default {
           password: this.password,
         });
         if (res.data && res.data.token) {
-          //localStorage.setItem("token", res.data);
-          axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
+          localStorage.setItem("token", res.data.token);
+          //axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
           this.$router.push("/dashboard");
         } else {
           alert("Something wrong!");

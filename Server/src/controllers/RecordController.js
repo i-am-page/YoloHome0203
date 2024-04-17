@@ -40,9 +40,35 @@ async function addDataToAdafruit(Api, value) {
 
 }
 
+exports.Statistics = async function (req, res) {
+    try {
+        const recordRef = collection(db, 'record');
+        const q = query(recordRef, orderBy('time', 'desc'), limit(10));
+        const records = await getDocs(q);
+        const recordArray = [];
+        if (records.empty) {
+            res.status(400).send('No records found');
+        } else {
+            records.forEach((doc) => {
+                const record = new Record(
+                    time = doc.data().time,
+                    temp = doc.data().temp,
+                    light = doc.data().light,
+                    humidity = doc.data().humidity,
+                    lightvalue = doc.data().lightvalue,
+                    fan = doc.data().fan
+                )
+                recordArray.push(record);
+            });
+            res.status(200).send(recordArray);
+        }
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+}
+
 exports.Index = async function (req, res) {
     try {
-        console.log("i went here")
         //load data from adafruit to firebase
         const fan_lastvalue = await getDataFromAPI('https://io.adafruit.com/api/v2/thanhdanh2754/feeds/fan/');
         const light_lastvalue = await getDataFromAPI('https://io.adafruit.com/api/v2/thanhdanh2754/feeds/light/');

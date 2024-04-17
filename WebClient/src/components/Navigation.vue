@@ -21,7 +21,7 @@
                         <!-- Menu Item Dashboard -->
                         <li>
                             <a class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out"
-                                href="#">
+                                href="/dashboard">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
@@ -39,7 +39,24 @@
                         <!-- Menu Item Tables -->
                     </ul>
                 </div>
+                <div>
+                    <ul class="mb-6 flex flex-col gap-1.5">
+                        <!-- Menu Item Auth Pages -->
+                        <li>
+                            <a class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out"
+                                href="/statistics">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="#ff0000" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M16 17l5-5-5-5M19.8 12H9M13 22a10 10 0 1 1 0-20" />
+                                </svg>
 
+                                Statistics
+                            </a>
+                        </li>
+                        <!-- Menu Item Auth Pages -->
+                    </ul>
+                </div>
                 <!-- Others Group -->
                 <div>
                     <ul class="mb-6 flex flex-col gap-1.5">
