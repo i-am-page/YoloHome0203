@@ -11,17 +11,50 @@ import { text } from '@fortawesome/fontawesome-svg-core';
 
 export default function LoginForm() {
   const navigate = useNavigate();
-
+  const initValue = {username: "", password: ""}
+  const [formVal, setFormVal] = useState(initValue)
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClick = () => {
-    navigate('/dashboard', { replace: true });
+    // navigate('/dashboard', { replace: true });
+    return;
   };
+
+  const handleChange = (e) => {
+    const {name, value} = e.target
+    setFormVal({...formVal, [name]: value})
+    console.log(formVal)
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    fetch("http://localhost:8080/authenticate", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Method": "GET, PUT, POST, DELETE, PATCH, OPTIONS",
+      },
+      body: JSON.stringify(formVal),
+    })
+      .catch((err) => {return})
+      .then((res) => {
+        if (!res || !res.ok || res.status > 400) {
+          return;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (!data) return;
+        console.log(data)
+      })
+  }
 
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" />
+        <TextField name="username" label="Email address" onChange={handleChange}/>
  
         <TextField
           name="password"
@@ -30,13 +63,13 @@ export default function LoginForm() {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                <IconButton onMouseDown={() => setShowPassword(true)} onMouseUp={() => setShowPassword(false)} onMouseLeave={()=>setShowPassword(false)} edge="end">
                   <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
                 </IconButton>
               </InputAdornment>
             ),
           }}
-        />
+          onChange={handleChange}/>
       </Stack>
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
@@ -46,7 +79,7 @@ export default function LoginForm() {
         </Link>
       </Stack>
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleSubmit}>
         Login
       </LoadingButton>
     </>
