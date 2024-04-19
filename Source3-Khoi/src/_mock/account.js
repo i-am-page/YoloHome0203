@@ -1,8 +1,9 @@
 // ----------------------------------------------------------------------
+const email = localStorage.user
 
 const account = {
-  displayName: sessionStorage.getItem('username'),
-  email: 'admin@huytehuy',
+  displayName: localStorage.user,
+  email: email,
   photoURL: '/assets/images/avatars/avatar_default.jpg',
 };
 

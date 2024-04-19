@@ -6,6 +6,7 @@ import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/iconify';
 import { text } from '@fortawesome/fontawesome-svg-core';
+import { jwtDecode } from 'jwt-decode';
 
 // ----------------------------------------------------------------------
 
@@ -15,20 +16,19 @@ export default function LoginForm() {
   const [formVal, setFormVal] = useState(initValue)
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleClick = () => {
-    // navigate('/dashboard', { replace: true });
-    return;
-  };
+  // const handleClick = () => {
+  //   navigate('/dashboard', { replace: true });
+  //   return;
+  // };
 
   const handleChange = (e) => {
     const {name, value} = e.target
     setFormVal({...formVal, [name]: value})
-    console.log(formVal)
   }
 
-  function handleSubmit(e) {
+  function handleClick(e) {
     e.preventDefault()
-    fetch("http://localhost:8080/authenticate", {
+    fetch("http://localhost:8080/account/authenticate", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -47,7 +47,9 @@ export default function LoginForm() {
       })
       .then((data) => {
         if (!data) return;
-        console.log(data)
+        var decoded = jwtDecode(data.token)
+        localStorage.setItem("user", decoded.username)
+        navigate('/dashboard', { replace: true });
       })
   }
 
@@ -79,7 +81,7 @@ export default function LoginForm() {
         </Link>
       </Stack>
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleSubmit}>
+      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
         Login
       </LoadingButton>
     </>

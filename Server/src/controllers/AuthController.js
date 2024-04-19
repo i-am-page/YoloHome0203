@@ -45,7 +45,6 @@ const register = async (req, res) => {
 const authenticate = async (req, res) => {
     //--------------------------------
     const { username, password } = req.body;
-    console.log(req.body)
     const accountRef = collection(db, "account");
     const q = query(accountRef,
         where("username", "==", username)
