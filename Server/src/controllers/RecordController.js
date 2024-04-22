@@ -121,7 +121,6 @@ exports.Index = async function (req, res) {
 exports.Store = async function (req, res) {
     try {
         const data = req.body;
-
         //add data to adafruit
         if (!(data.light === undefined)) {
             await addDataToAdafruit('https://io.adafruit.com/api/v2/webhooks/feed/EV7Kr8ULbGybCr8BVufY11GMJ6eB', data.light);
