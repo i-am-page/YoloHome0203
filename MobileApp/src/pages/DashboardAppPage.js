@@ -30,6 +30,8 @@ import { light } from '@mui/material/styles/createPalette';
 
 export default function DashboardAppPage() {
   const [lightStat, setLightStat] = useState("Off")
+  const [fanStat, setFanStat] = useState("Off")
+  const [once, setOnce] = useState(true)
   const theme = useTheme();
   const navigate = useNavigate();
   // useEffect(() => {
@@ -37,19 +39,89 @@ export default function DashboardAppPage() {
   //     navigate('/login', { replace: true });
   //     }    
   // },[])
+  function callLight(currStat) {
+    console.log(currStat)
+    // fetch("http://localhost:8080/record/store", {
+    //     method: "POST",
+    //     credentials: "include",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       "Access-Control-Allow-Origin": "*",
+    //       "Access-Control-Allow-Method": "GET, PUT, POST, DELETE, PATCH, OPTIONS",
+    //     },
+    //     body: JSON.stringify({light: currStat})
+    //   })
+    //     .catch((err) => {return})
+    //     .then((res) => {
+    //       if (!res || !res.ok || res.status > 400) {
+    //         return;
+    //       }
+    //       return res.json();
+    //     })
+    //     .then((data) => {
+    //       if (!data) return;
+    //       console.log(data)
+    //     })
+  }
+
+  function callFan(currStat) {
+    console.log(currStat)
+    // fetch("http://localhost:8080/record/store", {
+    //     method: "POST",
+    //     credentials: "include",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       "Access-Control-Allow-Origin": "*",
+    //       "Access-Control-Allow-Method": "GET, PUT, POST, DELETE, PATCH, OPTIONS",
+    //     },
+    //     body: JSON.stringify({fan: currStat})
+    //   })
+    //     .catch((err) => {return})
+    //     .then((res) => {
+    //       if (!res || !res.ok || res.status > 400) {
+    //         return;
+    //       }
+    //       return res.json();
+    //     })
+    //     .then((data) => {
+    //       if (!data) return;
+    //       console.log(data)
+    //     })
+  }
+
   function handleClickLight(e) {
-      if (lightStat === "On") setLightStat("Off")
-        else setLightStat("On")
-      e.preventDefault()
-      fetch("http://localhost:8080/record/store", {
-        method: "POST",
+    if (lightStat === "On") {
+      setLightStat("Off")
+      callLight(false)
+    }
+    else {
+      setLightStat("On")
+      callLight(true)
+    }
+    e.preventDefault()
+  }
+
+  function handleClickFan(e) {
+    if (fanStat === "On") {
+      setFanStat("Off")
+      callFan(false)
+    }
+    else {
+      setFanStat("On")
+      callFan(true)
+    }
+    e.preventDefault()
+  }
+
+  function getGraphData() {
+    fetch("http://localhost:8080/statistics", {
+        method: "GET",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Method": "GET, PUT, POST, DELETE, PATCH, OPTIONS",
         },
-        body: JSON.stringify({light: false, fan: false})
       })
         .catch((err) => {return})
         .then((res) => {
@@ -62,9 +134,11 @@ export default function DashboardAppPage() {
           if (!data) return;
           console.log(data)
         })
-    console.log(lightStat)
   }
-
+  if (once) {
+    getGraphData()
+    setOnce(false)
+  }
   return (
     <>
       <Helmet>
@@ -73,7 +147,7 @@ export default function DashboardAppPage() {
 
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Hi, Welcome back
+          Hi, Welcome back {localStorage.user}
         </Typography>
 
         <Grid container spacing={3}>
@@ -82,7 +156,7 @@ export default function DashboardAppPage() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={4}>
-            <AppWidgetSummary title="Face Scan" total="Face Recognition" color="info" icon={'ant-design:smile-outlined'} />
+            <button onClick={handleClickFan} style={{ width: '100%' , border: 'none' , background: 'transparent'}}><AppWidgetSummary title={fanStat} total="Fan" color="info" icon={'ant-design:thunderbolt-outlined'} /></button>
           </Grid>
 
           <Grid item xs={12} sm={6} md={4}>

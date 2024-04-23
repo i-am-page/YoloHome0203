@@ -121,6 +121,7 @@ exports.Index = async function (req, res) {
 exports.Store = async function (req, res) {
     try {
         const data = req.body;
+        console.log(data)
         //add data to adafruit
         if (!(data.light === undefined)) {
             await addDataToAdafruit('https://io.adafruit.com/api/v2/webhooks/feed/EV7Kr8ULbGybCr8BVufY11GMJ6eB', data.light);
@@ -130,7 +131,7 @@ exports.Store = async function (req, res) {
         }
         //add data to firebase
         await addDoc(collection(db, 'record'), data);
-        res.status(200).send('record created successfully');
+        res.status(200).send({status:'record created successfully'});
     } catch (error) {
         res.status(400).send(error.message);
     }
