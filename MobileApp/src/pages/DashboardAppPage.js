@@ -25,6 +25,8 @@ import {
   AppConversionRates,
 } from '../sections/@dashboard/app';
 import { light } from '@mui/material/styles/createPalette';
+import { array } from 'prop-types';
+import { set } from 'lodash';
 
 // ----------------------------------------------------------------------
 
@@ -32,7 +34,10 @@ export default function DashboardAppPage() {
   const [lightStat, setLightStat] = useState("Off")
   const [fanStat, setFanStat] = useState("Off")
   const [once, setOnce] = useState(true)
+  const [completed, setCompleted] = useState(false)
   const theme = useTheme();
+  var time = [], temp = [], humidity = []
+  const [currYear, setCurrYear] = useState("")
   const navigate = useNavigate();
   // useEffect(() => {
   //   if(sessionStorage.getItem('username')===null){
@@ -113,7 +118,7 @@ export default function DashboardAppPage() {
     e.preventDefault()
   }
 
-  function getGraphData() {
+  async function getGraphData() {
     fetch("http://localhost:8080/statistics", {
         method: "GET",
         credentials: "include",
@@ -133,12 +138,20 @@ export default function DashboardAppPage() {
         .then((data) => {
           if (!data) return;
           console.log(data)
+          for (let i = data.length; i > 0; i--) {
+            time.push(data[i-1].time.slice(8,10) + "/" + data[i - 1].time.slice(5, 7) + "/" + data[i - 1].time.slice(0,4))
+            temp.push(data[i-1].temp)
+            humidity.push(data[i-1].humidity)
+            if ((i-1)===0) setCompleted(true)
+          }
+          setCurrYear(data[0].time.slice(0, 4))
         })
   }
   if (once) {
     getGraphData()
     setOnce(false)
   }
+  
   return (
     <>
       <Helmet>
@@ -172,21 +185,9 @@ export default function DashboardAppPage() {
 
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
-              title="Graph of Brightness"
-              subheader="2023"
-              chartLabels={[
-                '03/01/2003',
-                '03/03/2003',
-                '03/07/2003',
-                '03/10/2003',
-                '03/13/2003',
-                '03/16/2003',
-                '03/18/2003',
-                '03/20/2003',
-                '03/24/2003',
-                '03/28/2003',
-                '03/31/2003',
-              ]}
+              title="Graph of Tempurature"
+              subheader={currYear}
+              chartLabels={time}
               chartData={[
                 // {
                 //   name: 'Team A',
@@ -195,10 +196,10 @@ export default function DashboardAppPage() {
                 //   data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
                 // },
                 {
-                  name: 'Brightness',
+                  name: 'Tempurature',
                   type: 'area',
                   fill: 'gradient',
-                  data: [44, 99, 41, 77, 22, 11, 31, 61, 56, 27, 73],
+                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
                 },
                 // {
                 //   name: 'Tempurature',
@@ -207,6 +208,7 @@ export default function DashboardAppPage() {
                 //   data: [30, 25, 29, 27, 21, 32,24, 32, 29, 26, 29],
                 // },
               ]}
+              typeGraph='Celsius'
             />
           </Grid>
 
