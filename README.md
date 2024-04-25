@@ -36,6 +36,16 @@ This repository contains the server code and web client for YoloHome0203.
    npm install
    ```
 
+6. Navigate to the mobile app folder:
+   ```bash
+   cd MobileApp
+   ```
+
+7. Install the dependencies:
+   ```bash
+   yarn install
+   ```
+
 ## Usage
 
 1.To start the server, run the following command:
@@ -48,4 +58,10 @@ npm run start
 
 ```bash
 npm run dev
+```
+
+3.To start the mobile app, run the following command:
+
+```bash
+yarn start
 ```
