@@ -38,57 +38,53 @@ export default function DashboardAppPage() {
   var time = [], temp = [], humidity = []
   const [currYear, setCurrYear] = useState("")
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   if(sessionStorage.getItem('username')===null){
-  //     navigate('/login', { replace: true });
-  //     }    
-  // },[])
+
   function callLight(currStat) {
-    // fetch("http://localhost:8080/record/store", {
-    //     method: "POST",
-    //     credentials: "include",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "Access-Control-Allow-Origin": "*",
-    //       "Access-Control-Allow-Method": "GET, PUT, POST, DELETE, PATCH, OPTIONS",
-    //     },
-    //     body: JSON.stringify({light: currStat})
-    //   })
-    //     .catch((err) => {return})
-    //     .then((res) => {
-    //       if (!res || !res.ok || res.status > 400) {
-    //         return;
-    //       }
-    //       return res.json();
-    //     })
-    //     .then((data) => {
-    //       if (!data) return;
-    //       console.log(data)
-    //     })
+    fetch("http://localhost:8080/record/store", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Method": "GET, PUT, POST, DELETE, PATCH, OPTIONS",
+        },
+        body: JSON.stringify({light: currStat})
+      })
+        .catch((err) => {return})
+        .then((res) => {
+          if (!res || !res.ok || res.status > 400) {
+            return;
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (!data) return;
+          console.log("Lights: " + data.status)
+        })
   }
 
   function callFan(currStat) {
-    // fetch("http://localhost:8080/record/store", {
-    //     method: "POST",
-    //     credentials: "include",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "Access-Control-Allow-Origin": "*",
-    //       "Access-Control-Allow-Method": "GET, PUT, POST, DELETE, PATCH, OPTIONS",
-    //     },
-    //     body: JSON.stringify({fan: currStat})
-    //   })
-    //     .catch((err) => {return})
-    //     .then((res) => {
-    //       if (!res || !res.ok || res.status > 400) {
-    //         return;
-    //       }
-    //       return res.json();
-    //     })
-    //     .then((data) => {
-    //       if (!data) return;
-    //       console.log(data)
-    //     })
+    fetch("http://localhost:8080/record/store", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Method": "GET, PUT, POST, DELETE, PATCH, OPTIONS",
+        },
+        body: JSON.stringify({fan: currStat})
+      })
+        .catch((err) => {return})
+        .then((res) => {
+          if (!res || !res.ok || res.status > 400) {
+            return;
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (!data) return;
+          console.log("Fan: " + data.status)
+        })
   }
 
   function handleClickLight(e) {
@@ -152,7 +148,7 @@ export default function DashboardAppPage() {
       await getGraphData();
     };
     fetchData();
-  }, []);
+  }, [])
 
   return (
     <>
@@ -226,6 +222,7 @@ export default function DashboardAppPage() {
                 //   data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
                 // }]}
                 {completed? [{ name: 'Humidity', type: 'area', fill: 'gradient', data: humidity }] : []}
+                typeGraph='Percent'
             />
           </Grid>
         </Grid>
