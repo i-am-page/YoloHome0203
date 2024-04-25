@@ -33,7 +33,6 @@ import { set } from 'lodash';
 export default function DashboardAppPage() {
   const [lightStat, setLightStat] = useState("Off")
   const [fanStat, setFanStat] = useState("Off")
-  const [once, setOnce] = useState(true)
   const [completed, setCompleted] = useState(false)
   const theme = useTheme();
   var time = [], temp = [], humidity = []
@@ -45,7 +44,6 @@ export default function DashboardAppPage() {
   //     }    
   // },[])
   function callLight(currStat) {
-    console.log(currStat)
     // fetch("http://localhost:8080/record/store", {
     //     method: "POST",
     //     credentials: "include",
@@ -70,7 +68,6 @@ export default function DashboardAppPage() {
   }
 
   function callFan(currStat) {
-    console.log(currStat)
     // fetch("http://localhost:8080/record/store", {
     //     method: "POST",
     //     credentials: "include",
@@ -119,7 +116,8 @@ export default function DashboardAppPage() {
   }
 
   async function getGraphData() {
-    fetch("http://localhost:8080/statistics", {
+    try {
+      const response = await fetch("http://localhost:8080/statistics", {
         method: "GET",
         credentials: "include",
         headers: {
@@ -127,31 +125,35 @@ export default function DashboardAppPage() {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Method": "GET, PUT, POST, DELETE, PATCH, OPTIONS",
         },
-      })
-        .catch((err) => {return})
-        .then((res) => {
-          if (!res || !res.ok || res.status > 400) {
-            return;
-          }
-          return res.json();
-        })
-        .then((data) => {
-          if (!data) return;
-          console.log(data)
-          for (let i = data.length; i > 0; i--) {
-            time.push(data[i-1].time.slice(8,10) + "/" + data[i - 1].time.slice(5, 7) + "/" + data[i - 1].time.slice(0,4))
-            temp.push(data[i-1].temp)
-            humidity.push(data[i-1].humidity)
-            if ((i-1)===0) setCompleted(true)
-          }
-          setCurrYear(data[0].time.slice(0, 4))
-        })
+      });
+
+      if (!response || !response.ok || response.status > 400) {
+        return;
+      }
+
+      const data = await response.json();
+
+      if (!data) return;
+
+      for (let i = data.length - 1; i >= 0; i--) {
+        time.push(data[i].time.slice(8, 10) + "/" + data[i].time.slice(5, 7) + "/" + data[i].time.slice(0, 4));
+        temp.push(data[i].temp);
+        humidity.push(data[i].humidity);
+      }
+      setCurrYear(data[0].time.slice(0, 4));
+      setCompleted(true);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   }
-  if (once) {
-    getGraphData()
-    setOnce(false)
-  }
-  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await getGraphData();
+    };
+    fetchData();
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -182,35 +184,17 @@ export default function DashboardAppPage() {
           <Grid item xs={12} sm={6} md={6}>
             <AppWidgetSummary title="Check" total="Check of Infrared for People Detection" color="error" icon={'ant-design:compress-outlined'} />
           </Grid>
-
+          {completed &&
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
               title="Graph of Tempurature"
               subheader={currYear}
-              chartLabels={time}
-              chartData={[
-                // {
-                //   name: 'Team A',
-                //   type: 'column',
-                //   fill: 'solid',
-                //   data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-                // },
-                {
-                  name: 'Tempurature',
-                  type: 'area',
-                  fill: 'gradient',
-                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-                },
-                // {
-                //   name: 'Tempurature',
-                //   type: 'line',
-                //   fill: 'solid',
-                //   data: [30, 25, 29, 27, 21, 32,24, 32, 29, 26, 29],
-                // },
-              ]}
-              typeGraph='Celsius'
+              chartLabels={completed? time : []}
+              chartData=
+                {completed? [{ name: 'Tempurature', type: 'area', fill: 'gradient', data: temp }] : []}
+                typeGraph='Celsius'
             />
-          </Grid>
+          </Grid>}
 
           <Grid item xs={12} md={6} lg={4}>
             <AppCurrentVisits
@@ -229,160 +213,21 @@ export default function DashboardAppPage() {
             />
           </Grid>
 
-
           <Grid item xs={12} md={6} lg={12}>
             <AppWebsiteVisits
-              title="Graph of Tempurature and Humidity"
-              subheader="2023"
-              chartLabels={[
-                '03/01/2003',
-                '03/03/2003',
-                '03/07/2003',
-                '03/10/2003',
-                '03/13/2003',
-                '03/16/2003',
-                '03/18/2003',
-                '03/20/2003',
-                '03/24/2003',
-                '03/28/2003',
-                '03/31/2003',
-              ]}
-              chartData={[
-                // {
-                //   name: 'Team A',
-                //   type: 'column',
-                //   fill: 'solid',
-                //   data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-                // },
-                {
-                  name: 'Humidity',
-                  type: 'area',
-                  fill: 'gradient',
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
-                },
-                {
-                  name: 'Tempurature',
-                  type: 'line',
-                  fill: 'solid',
-                  data: [30, 25, 29, 27, 21, 32,24, 32, 29, 26, 29],
-                },
-              ]}
+              title="Graph of Humidity"
+              subheader={currYear}
+              chartLabels={completed? time : []}
+              chartData=
+                // {[{
+                //   name: 'Humidity',
+                //   type: 'area',
+                //   fill: 'gradient',
+                //   data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+                // }]}
+                {completed? [{ name: 'Humidity', type: 'area', fill: 'gradient', data: humidity }] : []}
             />
           </Grid>
-
-
-
-
-
-
-
-
-
-
-
-          {/* <Grid item xs={12} md={6} lg={8}>
-            <AppConversionRates
-              title="Conversion Rates"
-              subheader="(+43%) than last year"
-              chartData={[
-                { label: 'Italy', value: 400 },
-                { label: 'Japan', value: 430 },
-                { label: 'China', value: 448 },
-                { label: 'Canada', value: 470 },
-                { label: 'France', value: 540 },
-                { label: 'Germany', value: 580 },
-                { label: 'South Korea', value: 690 },
-                { label: 'Netherlands', value: 1100 },
-                { label: 'United States', value: 1200 },
-                { label: 'United Kingdom', value: 1380 },
-              ]}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
-            <AppCurrentSubject
-              title="Current Subject"
-              chartLabels={['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math']}
-              chartData={[
-                { name: 'Series 1', data: [80, 50, 30, 40, 100, 20] },
-                { name: 'Series 2', data: [20, 30, 40, 80, 20, 80] },
-                { name: 'Series 3', data: [44, 76, 78, 13, 43, 10] },
-              ]}
-              chartColors={[...Array(6)].map(() => theme.palette.text.secondary)}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={8}>
-            <AppNewsUpdate
-              title="News Update"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.datatype.uuid(),
-                title: faker.name.jobTitle(),
-                description: faker.name.jobTitle(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
-              }))}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
-            <AppOrderTimeline
-              title="Order Timeline"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.datatype.uuid(),
-                title: [
-                  '1983, orders, $4220',
-                  '12 Invoices have been paid',
-                  'Order #37745 from September',
-                  'New order placed #XF-2356',
-                  'New order placed #XF-2346',
-                ][index],
-                type: `order${index + 1}`,
-                time: faker.date.past(),
-              }))}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
-            <AppTrafficBySite
-              title="Traffic by Site"
-              list={[
-                {
-                  name: 'FaceBook',
-                  value: 323234,
-                  icon: <Iconify icon={'eva:facebook-fill'} color="#1877F2" width={32} />,
-                },
-                {
-                  name: 'Google',
-                  value: 341212,
-                  icon: <Iconify icon={'eva:google-fill'} color="#DF3E30" width={32} />,
-                },
-                {
-                  name: 'Linkedin',
-                  value: 411213,
-                  icon: <Iconify icon={'eva:linkedin-fill'} color="#006097" width={32} />,
-                },
-                {
-                  name: 'Twitter',
-                  value: 443232,
-                  icon: <Iconify icon={'eva:twitter-fill'} color="#1C9CEA" width={32} />,
-                },
-              ]}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={8}>
-            <AppTasks
-              title="Tasks"
-              list={[
-                { id: '1', label: 'Create FireStone Logo' },
-                { id: '2', label: 'Add SCSS and JS files if required' },
-                { id: '3', label: 'Stakeholder Meeting' },
-                { id: '4', label: 'Scoping & Estimations' },
-                { id: '5', label: 'Sprint Showcase' },
-              ]}
-            />
-          </Grid> */}
         </Grid>
       </Container>
     </>

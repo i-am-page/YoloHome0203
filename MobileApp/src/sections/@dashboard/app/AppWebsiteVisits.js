@@ -21,7 +21,7 @@ export default function AppWebsiteVisits({ title, subheader, chartLabels, chartD
     fill: { type: chartData.map((i) => i.fill) },
     labels: chartLabels,
     xaxis: {
-      type: 'datetime'
+      type: 'string'
     },
     tooltip: {
       shared: true,
@@ -40,8 +40,8 @@ export default function AppWebsiteVisits({ title, subheader, chartLabels, chartD
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} />
-
       <Box sx={{ p: 3, pb: 1 }} dir="ltr">
+        {/* {console.log(chartLabels, "AA")} */}
         <ReactApexChart type="line" series={chartData} options={chartOptions} height={364} />
       </Box>
     </Card>
