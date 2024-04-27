@@ -7,9 +7,8 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cors({
-    origin:'*', 
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200,
+    credentials: true,
+    origin: "http://localhost:5173"
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
