@@ -3,7 +3,7 @@ import Inputa from "../components/InputField.vue";
 </script>
 
 <template>
-  <section class ="login-section bg-cover bg-center w-full h-screen">
+  <section class ="bg-no-repeat bg-cover bg-center" :style = "image">
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
       <div class="w-100 h-100 w-full rounded-lg bg-opacity-50 backdrop-blur-md bg-white shadow md:mt-0 sm:max-w-md xl:p-0">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -36,6 +36,11 @@ import axios from "../fetch/axios";
 export default {
   username: "",
   password: "",
+  data() {
+    return {
+      image: { backgroundImage: "url(https://www.livinspaces.net/wp-content/uploads/2019/07/smart-home-featured.jpg)" }
+    };
+  },
   mounted(){
     localStorage.removeItem("token");
     console.log(localStorage)
