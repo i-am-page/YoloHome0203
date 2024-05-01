@@ -1,4 +1,4 @@
-import { StyleSheet, Image, Text, View, Dimensions, TextInput, TouchableOpacity,Alert } from 'react-native';
+import { StyleSheet, Image, Text, View, Dimensions, TextInput, TouchableOpacity,Alert, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
@@ -44,23 +44,22 @@ export const Login = () => {
   };
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../../assets/images/background.png')}
-        style={{ width: deviceWidth, height: 'auto', aspectRatio: 1.0, }}
-      />
+      <ImageBackground source={require('../../assets/images/smartbackground.jpg')} style={{ width: deviceWidth, height: 'auto', aspectRatio: 0.46, }}>
+      
       <View style={[styles.bottomView]}>
-        <Text style={[styles.title,]}>Log In</Text>
-        <TextInput style={styles.input} placeholder="Username" value={username} onChangeText={setUsername} />
-        <TextInput style={styles.input} placeholder="Password" secureTextEntry value={password} onChangeText={setPassword} />
+        <Text style={[styles.title,]}>Sign In</Text>
+        <TextInput style={styles.input} placeholder="User Name" placeholderTextColor="#7a807c" value={username} onChangeText={setUsername} />
+        <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#7a807c" secureTextEntry value={password} onChangeText={setPassword} />
         <TouchableOpacity style={[styles.button]} onPress={handleLogIn}>
-          <Text style={{ textAlign: 'center', color: 'black', fontSize: 18, height: 30, fontWeight: "bold" }}>Log In</Text>
+          <Text style={{ textAlign: 'center', color: 'black', fontSize: 18, height: 30, fontWeight: "bold" }}>Sign In</Text>
         </TouchableOpacity>
-        <Text style={{ textAlign: 'center', color: 'black', fontSize: 14, height: 20 }}>Don't have account yet ?</Text>
+        <Text style={{ textAlign: 'right', color: 'black', fontSize: 14, height: 20, marginTop:-18, }}>Don't have account yet?</Text>
         <TouchableOpacity style={[]} onPress={createAccount}>
-          <Text style={{ textAlign: 'center', color: '#FDA43C', fontSize: 14, height: 20, textDecorationLine: "underline" }}>Create Account</Text>
+          <Text style={{ textAlign: 'right', color: '#32a852', fontSize: 14, height: 20, marginRight:30, fontStyle:'italic', fontWeight: "bold"}}>Create Account</Text>
         </TouchableOpacity>
       </View>
-
+      
+      </ImageBackground>
     </View>
   );
 }
@@ -70,24 +69,32 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     //justifyContent: 'center',
+    backgroundColor: '#a7abb0',
   },
   title: {
-    fontSize: 20,
+    textAlign: 'right',
+    fontSize: 25,
     fontWeight: 'bold',
-    marginTop: 20,
+    fontStyle: 'italic',
+    marginTop: 85,
+    marginRight: 60,
+    marginBottom: 5,
   },
   input: {
-    height: 40,
-    margin: 12,
+    height: 50,
+    margin: 5,
+    marginLeft: 50,
     borderWidth: 1,
     padding: 10,
     width: deviceWidth * 3 / 4,
     borderRadius: 10,
+    color: '#000000',
   },
   button: {
-    backgroundColor: '#FDA43C',
+    marginTop: 20,
+    backgroundColor: '#63ebdd',
     height: 40,
-    margin: 12,
+    margin: 20,
     padding: 10,
     justifyContent: 'center',
     borderRadius: 10,

@@ -26,7 +26,7 @@ export const Homepage = (account: any) => {
   const refresh = async () => {
     try {
       const data = await apiFacade.getRecord();
-      console.log(data);
+      // console.log(data);
       setData(data);
     } catch (error) {
       console.error(error);
@@ -49,20 +49,69 @@ export const Homepage = (account: any) => {
     setData(res);
   };
   const dateTime = new Date((data as any)?.time);
-  const date = `${dateTime.getFullYear()}-${
-    dateTime.getMonth() + 1
-  }-${dateTime.getDate()}`;
-  const time = `${
-    dateTime.getHours() + 17 < 24
-      ? dateTime.getHours() + 17
-      : dateTime.getHours() - 7
-  }:${dateTime.getMinutes()}:${dateTime.getSeconds()}`;
+  var date = ``;
+  if ((dateTime.getMonth()+1)>10) {
+    if ((dateTime.getDate()>10)) {
+        date = `${dateTime.getDate()}/${
+        dateTime.getMonth() + 1
+      }/${dateTime.getFullYear()}`;
+    } else {
+      date = `0${dateTime.getDate()}/${
+        dateTime.getMonth() + 1
+      }/${dateTime.getFullYear()}`;
+    }
+  } else {
+    if ((dateTime.getDate() > 10)) {
+      date = `${dateTime.getDate()}/0${
+        dateTime.getMonth() + 1
+      }/${dateTime.getFullYear()}`;
+    } else {
+      date = `0${dateTime.getDate()}/0${
+        dateTime.getMonth() + 1
+      }/${dateTime.getFullYear()}`;
+    }
+  }
+  var time = ``;
+  const hour = (dateTime.getHours() + 17 < 24) ? (dateTime.getHours() + 17) : (dateTime.getHours() - 7)
+  if (hour > 10) {
+    if (dateTime.getMinutes() > 10) {
+      if (dateTime.getSeconds() > 10) {
+        time = `${hour}:${dateTime.getMinutes()}:${dateTime.getSeconds()}`
+      }
+      else {
+        time = `${hour}:${dateTime.getMinutes()}:0${dateTime.getSeconds()}`
+      }
+    } else {
+      if (dateTime.getSeconds() > 10) {
+        time = `${hour}:0${dateTime.getMinutes()}:${dateTime.getSeconds()}`
+      }
+      else {
+        time = `${hour}:0${dateTime.getMinutes()}:0${dateTime.getSeconds()}`
+      }
+    }
+  } else {
+    if (dateTime.getMinutes() > 10) {
+      if (dateTime.getSeconds() > 10) {
+        time = `0${hour}:${dateTime.getMinutes()}:${dateTime.getSeconds()}`
+      }
+      else {
+        time = `0${hour}:${dateTime.getMinutes()}:0${dateTime.getSeconds()}`
+      }
+    } else {
+      if (dateTime.getSeconds() > 10) {
+        time = `0${hour}:0${dateTime.getMinutes()}:${dateTime.getSeconds()}`
+      }
+      else {
+        time = `0${hour}:0${dateTime.getMinutes()}:0${dateTime.getSeconds()}`
+      }
+    }
+  }
   return (
     <View style={styles.container}>
-      <View style={[styles.row, { marginTop: 10, paddingVertical: 10 }]}>
+      <View style={[styles.row, { marginTop: 20, paddingVertical: 10 }]}>
         <Image
-          source={require("../../assets/images/Avatar(2).png")}
-          style={[{ width: 40, height: 40 }]}
+          source={require("../../assets/images/homeicon.png")}
+          style={[{ width: 60, height: 60 }]}
         />
         <Text
           style={{
@@ -72,31 +121,29 @@ export const Homepage = (account: any) => {
             fontWeight: "bold",
           }}
         >
-          {" "}
-          {nickname}
+          YoloHome
         </Text>
       </View>
       <View>
-        <Text>
-          Cập nhật cuối: {time} {date}
-        </Text>
-        <TouchableOpacity style={styles.row}>
-          <Text>Refresh</Text>
+        <TouchableOpacity style={[styles.row, {marginTop:30}]}>
+          <Text style={[{fontStyle:"italic"}]}>
+            Cập nhật cuối: {date} lúc {time}
+          </Text>
           <TouchableOpacity onPress={refresh}>
             <Image
-              source={require("../../assets/images/refresh.png")}
-              style={[{ width: 20, height: 20 }]}
+              source={require("../../assets/images/reload.gif")}
+              style={[{ width: 30, height: 30, marginLeft:10}]}
             />
           </TouchableOpacity>
         </TouchableOpacity>
       </View>
-      <View style={styles.table}>
-        <View style={[styles.row, styles.cell]}>
+      <View style={[styles.table, {backgroundColor:'#ffcaa1'}]}>
+        <View style={[styles.row, styles.cell, {backgroundColor:'#ffcaa1'}]}>
           <View style={styles.row}>
-            <Text style={styles.sub}>Room Temp</Text>
+            <Text style={styles.sub}>Nhiệt độ</Text>
             <Image
-              source={require("../../assets/images/temp.png")}
-              style={[{ marginLeft: -10, width: 20, height: 20 }]}
+              source={require("../../assets/images/temper.png")}
+              style={[{ marginLeft: -20, width: 30, height: 30 }]}
             />
           </View>
           <Text style={[styles.main]}>
@@ -104,13 +151,13 @@ export const Homepage = (account: any) => {
           </Text>
         </View>
       </View>
-      <View style={[styles.table, { marginTop: 20 }]}>
-        <View style={[styles.row, styles.cell]}>
+      <View style={[styles.table, { marginTop: 20, backgroundColor: '#a1d4ff' }]}>
+        <View style={[styles.row, styles.cell , {backgroundColor: '#a1d4ff'}]}>
           <View style={styles.row}>
-            <Text style={styles.sub}>Humidity</Text>
+            <Text style={styles.sub}>Độ ẩm</Text>
             <Image
               source={require("../../assets/images/humid.png")}
-              style={[{ marginLeft: -30, width: 20, height: 20 }]}
+              style={[{ marginLeft: -20, width: 30, height: 30 }]}
             />
           </View>
           <Text style={styles.main}>
@@ -118,13 +165,13 @@ export const Homepage = (account: any) => {
           </Text>
         </View>
       </View>
-      <View style={[styles.table, { marginTop: 20 }]}>
-        <View style={[styles.row, styles.cell]}>
+      <View style={[styles.table, { marginTop: 20, backgroundColor: '#ffffcc' }]}>
+        <View style={[styles.row, styles.cell, {backgroundColor: '#ffffcc'}]}>
           <View style={styles.row}>
             <Text style={styles.sub}>Độ sáng</Text>
             <Image
-              source={require("../../assets/images/lux.png")}
-              style={[{ marginLeft: -30, width: 20, height: 20 }]}
+              source={require("../../assets/images/luminous.png")}
+              style={[{ marginLeft: -20, width: 30, height: 30 }]}
             />
           </View>
           <Text style={styles.main}>
@@ -134,8 +181,9 @@ export const Homepage = (account: any) => {
       </View>
       <Text
         style={{
-          marginVertical: 10,
-          marginRight: 220,
+          marginTop: 40,
+          marginBottom: 20,
+          marginRight: 270,
           color: "black",
           fontSize: 18,
           height: 30,
@@ -144,14 +192,14 @@ export const Homepage = (account: any) => {
       >
         Thiết bị
       </Text>
-      <View style={styles.routineTable}>
-        <View style={[styles.rowns, { marginBottom: 10 }]}>
+      <View style={[styles.routineTable, {marginRight:115, backgroundColor: "#78f4ff"}]}>
+        <View style={[styles.rowns, { marginBottom: 10, backgroundColor: "#78f4ff" }]}>
           <View style={[styles.rowns, { marginRight: 40 }]}>
             <Image
               source={require("../../assets/images/light.png")}
               style={[{ width: 40, height: 40 }]}
             />
-            <Text style={styles.text}>Đèn</Text>
+            <Text style={[styles.text, {marginRight:8}]}>Đèn</Text>
           </View>
           <TouchableOpacity
             style={[
@@ -190,8 +238,8 @@ export const Homepage = (account: any) => {
             <Text> {(data as any) ? "Bật" : "Wait"} </Text>
           </TouchableOpacity>
         </View>
-        <View style={[styles.rowns, { marginBottom: 10 }]}>
-          <View style={[styles.rowns, { marginRight: 40 }]}>
+        <View style={[styles.rowns, { marginBottom: 10, backgroundColor: "#78f4ff" }]}>
+          <View style={[styles.rowns, { marginRight: 40, backgroundColor: "#78f4ff" }]}>
             <Image
               source={require("../../assets/images/fan.png")}
               style={[{ width: 40, height: 40 }]}
@@ -288,13 +336,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#78f4ff",
     //justifyContent: 'center',
   },
   table: {
     marginTop: 20,
     borderWidth: 2,
-    borderColor: "#EA9939",
+    borderColor: "#000000",
     borderRadius: 20,
     padding: 5,
     backgroundColor: "#fff",

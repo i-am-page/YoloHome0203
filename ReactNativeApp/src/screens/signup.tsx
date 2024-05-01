@@ -1,4 +1,4 @@
-import { StyleSheet, Image, Text, View, Dimensions, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, Text, View, Dimensions, TextInput, TouchableOpacity, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
@@ -23,9 +23,9 @@ export const Signup = () => {
     console.log(password);
     const res = await apiFacade.signup(username,nickname,password);
     if (res != "Existing Account") {
-      console.log("Can't create account");
+      console.log("Account Inavailable");
     } else {
-      console.log("Created Account");
+      console.log("Account Created");
     }
   };
   const login = () => {
@@ -33,24 +33,24 @@ export const Signup = () => {
   }
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../../assets/images/background.png')}
-        style={{ width: deviceWidth, height: 'auto', aspectRatio: 1.0, }}
-      />
+      <ImageBackground
+        source={require('../../assets/images/smartbackground.jpg')}
+        style={{ width: deviceWidth, height: 'auto', aspectRatio: 0.43, }}
+      >
       <View style={[styles.bottomView]}>
         <Text style={[styles.title,]}>Sign Up</Text>
-        <TextInput style={styles.input} placeholder="Username" value={username} onChangeText={setUsername} />
-        <TextInput style={styles.input} placeholder="Nickname" value={nickname} onChangeText={setNickname} />
-        <TextInput style={styles.input} placeholder="Password" secureTextEntry value={password} onChangeText={setPassword} />
+        <TextInput style={styles.input} placeholder="User Name" placeholderTextColor="#7a807c" value={username} onChangeText={setUsername} />
+        <TextInput style={styles.input} placeholder="Visible Name" placeholderTextColor="#7a807c" value={nickname} onChangeText={setNickname} />
+        <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#7a807c" secureTextEntry value={password} onChangeText={setPassword} />
         <TouchableOpacity style={[styles.button]} onPress={handleSignUp}>
           <Text style={{ textAlign: 'center', color: 'black', fontSize: 18, height: 30, fontWeight: "bold" }}>Sign Up</Text>
         </TouchableOpacity>
-        <Text style={{ textAlign: 'center', color: 'black', fontSize: 14, height: 20 }}>Have account yet ?</Text>
+        <Text style={{ textAlign: 'right', color: 'black', fontSize: 14, height: 20, marginRight: 30 }}>Have An Account?</Text>
         <TouchableOpacity style={[]} onPress={login}>
-          <Text style={{ textAlign: 'center', color: '#FDA43C', fontSize: 14, height: 20, textDecorationLine: "underline" }}>Log In</Text>
+          <Text style={{ textAlign: 'right', fontSize: 14, height: 20, fontStyle:'italic', fontWeight:'bold', color: '#32a852',  marginRight:90}}>Sign In</Text>
         </TouchableOpacity>
       </View>
-
+      </ImageBackground>
     </View>
   );
 }
@@ -60,24 +60,33 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     //justifyContent: 'center',
+    backgroundColor: '#a7abb0',
   },
   title: {
-    fontSize: 20,
+    textAlign: 'right',
+    fontSize: 25,
     fontWeight: 'bold',
-    marginTop: 20,
+    fontStyle: 'italic',
+    marginTop: 95,
+    marginRight: 60,
+    marginBottom: 5,
   },
   input: {
-    height: 40,
-    margin: 12,
+    height: 50,
+    margin: 5,
+    marginLeft: 50,
     borderWidth: 1,
     padding: 10,
     width: deviceWidth * 3 / 4,
     borderRadius: 10,
+    color: '#000000',
   },
   button: {
-    backgroundColor: '#FDA43C',
+    marginTop: 10,
+    backgroundColor: '#63ebdd',
     height: 40,
-    margin: 12,
+    margin: 30,
+    marginBottom: 5,
     padding: 10,
     justifyContent: 'center',
     borderRadius: 10,

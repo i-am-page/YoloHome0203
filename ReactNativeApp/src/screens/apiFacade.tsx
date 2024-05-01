@@ -2,7 +2,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 const PORT = 8080;
-const HOST = "192.168.0.100";
+const HOST = "192.168.2.22";
 var token = { token: "" };
 
 export const apiFacade = {
@@ -30,7 +30,6 @@ export const apiFacade = {
     const headers = {
       authorization: "Bearer " + token,
     };
-    console.log(headers);
     const res = await axios.get(`http://${HOST}:${PORT}/record`, {
       headers: headers,
     });

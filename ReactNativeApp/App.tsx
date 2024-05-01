@@ -6,10 +6,12 @@ import { Login } from './src/screens/login';
 import { Chart } from './src/screens/Chart';
 import { Signup } from './src/screens/signup';
 import 'react-native-gesture-handler';
-// import { UserProvider } from './src/components/UserContext';
+
+// import { UserProvider } from './src/components/UserContext';\
+
 const Stack = createStackNavigator();
 export default function App() {
-  return (
+return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Home" component={Homepage} />
