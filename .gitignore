@@ -1,6 +1,5 @@
 # Ignore node_modules directory
 MobileApp/node_modules/
-ReactNativeApp/node_modules/
 Server/node_modules/
 WebClient/node_modules
 
