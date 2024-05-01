@@ -38,12 +38,12 @@ This repository contains the server code and web client for YoloHome0203.
 
 6. Navigate to the mobile app folder:
    ```bash
-   cd MobileApp
+   cd ReactNativeApp
    ```
 
 7. Install the dependencies:
    ```bash
-   yarn install
+   npm install
    ```
 
 ## Usage
@@ -63,5 +63,12 @@ npm run dev
 3.To start the mobile app, run the following command:
 
 ```bash
-yarn start
+npm start
+```
+
+In case of having dependencies errors, please reinstall the following dependencies with following commands:
+
+```bash
+npm install @react-navigation/native @react-navigation/stack
+npm install react-native-screens
 ```
