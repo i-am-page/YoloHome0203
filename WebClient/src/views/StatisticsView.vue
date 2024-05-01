@@ -35,7 +35,8 @@ import {
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    
 } from 'chart.js'
 ChartJS.register(
     CategoryScale,
@@ -75,36 +76,42 @@ export default {
         async getData() {
             try {
                 const res = await axios.get("/statistics");
+                console.log(res.data)
                 this.chartData = {
                     labels: res.data.map(row => moment(row.time).utcOffset(0).format("h:mm:ss a")),
                     datasets: [
                         {
                             label: 'Temperature',
                             backgroundColor: '#f87979',
-                            data: res.data.map(row => row.temp),
+                            data: [30,35,40,32,43,32,20,21,18,16],
                             pointRadius: 0,
                             tension: 0.3,
-                            borderColor: '#f87979'
+                            borderColor: '#f87979',
+                            fill : true,
+                            borderWidth: 4
                         },
                         {
                             label: 'Humidity',
-                            backgroundColor: '#79f8f8',
-                            data: res.data.map(row => row.humidity),
+                            backgroundColor: '#00BFFF',
+                            data: [55,45,40,42,53,32,40,21,38,36],
                             pointRadius: 0,
                             tension: 0.3,
-                            borderColor: '#79f8f8'
+                            borderColor: '#00BFFF',
+                            borderWidth: 4
+                            
                         },
                         {
                             label: 'Luminosity',
-                            backgroundColor: '#f8f879',
-                            data: res.data.map(row => row.lightvalue),
+                            backgroundColor: '#32CD32',
+                            data: [33,45,34,56,35,36,38,39,40,42],
                             pointRadius: 0,
                             tension: 0.3,
-                            borderColor: '#f8f879'
+                            borderColor: '#f8f879',
+                            borderWidth: 4
                         }
                     ]
-
                 }
+
                 this.loaded = true
             } catch (e) {
                 console.error(e)
