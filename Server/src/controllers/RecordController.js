@@ -43,7 +43,7 @@ async function addDataToAdafruit(Api, value) {
 exports.Statistics = async function (req, res) {
     try {
         const recordRef = collection(db, 'record');
-        const q = query(recordRef, orderBy('time', 'desc'), limit(10));
+        const q = query(recordRef, orderBy('time', 'desc'), limit(5));
         const records = await getDocs(q);
         const recordArray = [];
         if (records.empty) {

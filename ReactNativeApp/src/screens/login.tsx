@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { apiFacade } from './apiFacade';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 type RootStackParamList = {
   Home: undefined;
   Login: undefined;
@@ -17,16 +18,27 @@ export const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const handleLogIn = async () => {
-    const res = await apiFacade.login(username, password);
-    console.log(res);
-    if (res != "No matching documents") {
-      navigation.replace('Home', res);
-      console.log("Logged In");
-    } else {
-      console.log("Sai tài khoản hoặc mật khẩu");
-      Alert.alert("Error", "Sai tài khoản hoặc mật khẩu");
+    try{
+      const res = await apiFacade.login(username, password);
+      console.log(res);
+      if (res != "Invalid password") {
+        saveToken(res.token);
+        navigation.replace('Home', res);
+        console.log("Logged In");
+      }
+    }catch(e){
+      console.log(e);
+      Alert.alert("Invalid username or password");
     }
   };
+  const saveToken = async (token: string) => {
+    try {
+      await AsyncStorage.setItem('token', token);
+    } catch (e) {
+      // saving error
+      console.log(e);
+    }
+  }
   const createAccount = () => {
     navigation.navigate('Signup');
   };

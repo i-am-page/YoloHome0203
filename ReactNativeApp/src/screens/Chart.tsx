@@ -51,12 +51,12 @@ export const Chart = (account: any) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const { labels, humidata, tempdata, luxdata } = await apiFacade.getChartData();
+        const { labels, datasets } = await apiFacade.getChartData();
         sethumiData({
           labels: labels,
           datasets: [
             {
-              data: humidata,
+              data: datasets[0].data,
               color: (opacity = 1) => `rgba(0,210,255, ${opacity})`, // optional
               strokeWidth: 2,
             },
@@ -76,7 +76,7 @@ export const Chart = (account: any) => {
           labels: labels,
           datasets: [
             {
-              data: tempdata,
+              data: datasets[1].data,
               color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`, // optional
               strokeWidth: 2,
             },
@@ -96,7 +96,7 @@ export const Chart = (account: any) => {
           labels: labels,
           datasets: [
             {
-              data: luxdata,
+              data: datasets[2].data,
               color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`, // optional
               strokeWidth: 2,
             },

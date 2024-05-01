@@ -86,7 +86,7 @@ export default {
         this.getData();
         this.interval = setInterval(() => {
             this.getData();
-        }, 2000);
+        }, 15000);
     },
     beforeDestroy() {
         clearInterval(this.interval);
@@ -97,7 +97,6 @@ export default {
                 const res = await axios.get("/record",
                     { headers: { authorization: `Bearer ${localStorage.getItem("token")}` } });
                 this.Data = await res.data;
-                console.log(this.Data)
             } catch (error) {
                 console.log(error);
                 this.$router.push("/unauthorized");

@@ -75,7 +75,6 @@ export default {
         async getData() {
             try {
                 const res = await axios.get("/statistics");
-                console.log(res.data)
                 this.chartData = {
                     labels: res.data.map(row => moment(row.time).utcOffset(0).format("h:mm:ss a")),
                     datasets: [

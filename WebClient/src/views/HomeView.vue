@@ -52,7 +52,6 @@ export default {
         });
         if (res.data && res.data.token) {
           localStorage.setItem("token", res.data.token);
-          //axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
           this.$router.push("/dashboard");
         } else {
           alert("Something wrong!");
