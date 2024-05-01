@@ -1,0 +1,15 @@
+# Ignore node_modules directory
+MobileApp/node_modules/
+Server/node_modules/
+WebClient/node_modules
+
+# Ignore compiled files
+*.o
+*.out
+
+# Ignore logs and databases
+*.log
+*.sqlite
+
+# Ignore environment-specific files
+.env
