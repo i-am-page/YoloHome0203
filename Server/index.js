@@ -8,7 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors({
     credentials: true,
-    origin: "http://localhost:3000"
+    origin: ["http://localhost:3000","http://localhost:5173"]
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
