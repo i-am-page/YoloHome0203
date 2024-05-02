@@ -15,6 +15,11 @@ import Navigation from "../components/Navigation.vue";
             <main>
                 <div class="max-w-screen-2xl mx-auto p-4 md:p-6 2xl:p-10 bg-gray-100">
                     <div class="container">
+                        <form @submit.prevent="exportExcel">
+                            <input type="date" id="start-date">
+                            <input type="date" id="end-date">
+                            <button type="submit">Export Excel</button>
+                        </form>
                         <Line v-if="loaded" :data="chartData" />
                     </div>
                 </div>
@@ -65,6 +70,24 @@ export default {
         }, 15000);
     },
     methods: {
+        async exportExcel() {
+            const startDate = document.getElementById("start-date").value;
+            const endDate = document.getElementById("end-date").value;
+            console.log(startDate, endDate);
+            try {
+                const res = await axios.get(`/export?start=${startDate}&end=${endDate}`,
+                    { headers: { authorization: `Bearer ${localStorage.getItem("token")}` } },{ responseType: 'blob' }).then((response) => {
+                        const url = URL.createObjectURL(new Blob([response.data]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', 'data.xlsx');
+                        document.body.appendChild(link);
+                        link.click();
+                    });
+            } catch (error) {
+                console.log(error);
+            }
+        },
         async updateData() {
             try {
                 const res = await axios.get("/record",
