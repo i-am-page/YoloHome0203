@@ -5,13 +5,13 @@ import React, { useState } from 'react';
 import { apiFacade } from './apiFacade';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 type RootStackParamList = {
-  Home: undefined;
-  Login: undefined;
+  Dashboard: undefined;
+  SignIn: undefined;
   Chart: undefined;
-  Signup: undefined;
+  SignUp: undefined;
   // Add other screens here
 };
-type NavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+type NavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
 const deviceWidth = Dimensions.get('window').width;
 export const Login = () => {
   const navigation = useNavigation<NavigationProp>();
@@ -19,11 +19,12 @@ export const Login = () => {
   const [password, setPassword] = useState('');
   const handleLogIn = async () => {
     try{
+      // console.log(username, password)
       const res = await apiFacade.login(username, password);
-      console.log(res);
+      // console.log(res);
       if (res != "Invalid password") {
         saveToken(res.token);
-        navigation.replace('Home', res);
+        navigation.replace('Dashboard', res);
         console.log("Logged In");
       }
     }catch(e){
@@ -35,12 +36,12 @@ export const Login = () => {
     try {
       await AsyncStorage.setItem('token', token);
     } catch (e) {
-      // saving error
       console.log(e);
     }
+
   }
   const createAccount = () => {
-    navigation.navigate('Signup');
+    navigation.navigate('SignUp');
   };
   return (
     <View style={styles.container}>
@@ -53,9 +54,9 @@ export const Login = () => {
         <TouchableOpacity style={[styles.button]} onPress={handleLogIn}>
           <Text style={{ textAlign: 'center', color: 'black', fontSize: 18, height: 30, fontWeight: "bold" }}>Sign In</Text>
         </TouchableOpacity>
-        <Text style={{ textAlign: 'right', color: 'black', fontSize: 14, height: 20, marginTop:-18, }}>Don't have account yet?</Text>
+        <Text style={{ textAlign: 'right', color: 'black', fontSize: 14, height: 20, marginTop:-18, marginRight: 5, }}>Don't have an account?</Text>
         <TouchableOpacity style={[]} onPress={createAccount}>
-          <Text style={{ textAlign: 'right', color: '#32a852', fontSize: 14, height: 20, marginRight:30, fontStyle:'italic', fontWeight: "bold"}}>Create Account</Text>
+          <Text style={{ textAlign: 'right', color: '#32a852', fontSize: 14, height: 20, marginRight:35, fontStyle:'italic', fontWeight: "bold"}}>Sign Up Now!</Text>
         </TouchableOpacity>
       </View>
       

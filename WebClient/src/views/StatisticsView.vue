@@ -15,6 +15,11 @@ import Navigation from "../components/Navigation.vue";
             <main>
                 <div class="max-w-screen-2xl mx-auto p-4 md:p-6 2xl:p-10 bg-gray-100">
                     <div class="container">
+                        <form @submit.prevent="exportExcel">
+                            <input type="date" id="start-date">
+                            <input type="date" id="end-date">
+                            <button type="submit">Export Excel</button>
+                        </form>
                         <Line v-if="loaded" :data="chartData" />
                     </div>
                 </div>
@@ -36,7 +41,7 @@ import {
     Title,
     Tooltip,
     Legend,
-    
+
 } from 'chart.js'
 ChartJS.register(
     CategoryScale,
@@ -62,9 +67,33 @@ export default {
         this.interval = setInterval(() => {
             this.updateData();
             this.getData();
-        }, 10000);
+        }, 60000);
     },
     methods: {
+        async exportExcel() {
+            try {
+                const startDate = document.getElementById("start-date").value;
+                const endDate = document.getElementById("end-date").value;
+
+                const res = await axios.get(`/export?start=${startDate}&end=${endDate}`,
+                    {
+                        headers: {
+                            authorization: `Bearer ${localStorage.getItem("token")}`,
+                            Accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                        }, responseType: 'blob'
+                    });
+                const url = URL.createObjectURL(new Blob([res.data], {
+                    type: 'application/vnd.ms-excel'
+                }))
+                const link = document.createElement('a')
+                link.href = url
+                link.setAttribute('download', 'data.xlsx')
+                document.body.appendChild(link)
+                link.click()
+            } catch (error) {
+                console.error(error)
+            }
+        },
         async updateData() {
             try {
                 const res = await axios.get("/record",
@@ -83,27 +112,27 @@ export default {
                         {
                             label: 'Temperature',
                             backgroundColor: '#f87979',
-                            data: [30,35,40,32,43,32,20,21,18,16],
+                            data: res.data.map(row => row.temp),
                             pointRadius: 0,
                             tension: 0.3,
                             borderColor: '#f87979',
-                            fill : true,
+                            fill: true,
                             borderWidth: 4
                         },
                         {
                             label: 'Humidity',
                             backgroundColor: '#00BFFF',
-                            data: [55,45,40,42,53,32,40,21,38,36],
+                            data: res.data.map(row => row.humidity),
                             pointRadius: 0,
                             tension: 0.3,
                             borderColor: '#00BFFF',
                             borderWidth: 4
-                            
+
                         },
                         {
                             label: 'Luminosity',
                             backgroundColor: '#32CD32',
-                            data: [33,45,34,56,35,36,38,39,40,42],
+                            data: res.data.map(row => row.lightvalue),
                             pointRadius: 0,
                             tension: 0.3,
                             borderColor: '#f8f879',

@@ -5,6 +5,6 @@ const route = (app) => {
     app.use('/record', recordRouter)
     app.use('/account', accountRouter)
     app.get('/statistics', RecordController.Statistics)
+    app.get('/export', RecordController.Export)  
 }
-
 module.exports = route

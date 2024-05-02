@@ -4,13 +4,13 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { apiFacade } from './apiFacade';
 type RootStackParamList = {
-  Home: undefined;
-  Login: undefined;
-  Chart: undefined;
-  Signup: undefined;
+  Dashboard: undefined;
+  SignIn: undefined;
+  Graphs: undefined;
+  SignUp: undefined;
   // Add other screens here
 };
-type NavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+type NavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
 const deviceWidth = Dimensions.get('window').width;
 export const Signup = () => {
   const navigation = useNavigation<NavigationProp>();
@@ -18,9 +18,9 @@ export const Signup = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const handleSignUp = async () => {
-    console.log(username);
-    console.log(nickname);
-    console.log(password);
+    // console.log(username);
+    // console.log(nickname);
+    // console.log(password);
     const res = await apiFacade.signup(username,nickname,password);
     if (res != "Existing Account") {
       console.log("Account Inavailable");
@@ -29,7 +29,7 @@ export const Signup = () => {
     }
   };
   const login = () => {
-    navigation.replace('Login');
+    navigation.replace('SignIn');
   }
   return (
     <View style={styles.container}>
