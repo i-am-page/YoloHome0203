@@ -22,16 +22,16 @@ import Inputa from "../components/InputField.vue";
               class="w-60 block mx-auto text-white bg-black hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5">
               Sign in
             </button>
-            <button type="button" @click="showModal = true"
+            <!-- <button type="button" @click="showModal = true"
               class="w-60 block mx-auto text-white bg-black hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5">
               Authenticate
-            </button>
+            </button> -->
           </form>
 
         </div>
       </div>
     </div>
-    <div v-if="showModal" class="fixed z-10 inset-0 overflow-y-auto flex items-center justify-center">
+    <!-- <div v-if="showModal" class="fixed z-10 inset-0 overflow-y-auto flex items-center justify-center">
       <div class="flex items-center justify-center min-h-screen">
         <div
           class="inline-block align-middle bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all">
@@ -44,7 +44,7 @@ import Inputa from "../components/InputField.vue";
             Login</button>
         </div>
       </div>
-    </div>
+    </div> -->
   </section>
 
 </template>
@@ -58,63 +58,63 @@ import axios from "axios";
 export default {
   data() {
     return {
-      showModal: false,
+      //showModal: false,
       username: "",
       password: "",
     }
   },
-  watch: {
-    showModal(val) {
-      if (val) {
-        this.authenticate();
-      }
-    },
-  },
+  // watch: {
+  //   showModal(val) {
+  //     if (val) {
+  //       this.authenticate();
+  //     }
+  //   },
+  // },
   mounted() {
     localStorage.removeItem("token");
     console.log(localStorage)
   },
   methods: {
-    turnoffcam() {
-      this.showModal = false;
-      this.$refs.video.srcObject.getTracks().forEach((track) => {
-        track.stop();
-      });
-    },
-    async loginwithface() {
-      const video = this.$refs.video;
-      const canvas = document.createElement("canvas");
-      const context = canvas.getContext("2d");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const data = canvas.toDataURL("image/png");
-      var form = new FormData();
-      form.append("image", data);
-      await axios({
-        url: "https://api.chooch.ai/predict/face?person_id_filter=-1&model_id=14&apikey=426e5c84-7d52-4d7a-b0b6-afdc078ca398",
-        method: "POST",
-        data: form,
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    },
-    authenticate() {
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then((stream) => {
-          this.$refs.video.srcObject = stream;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+    // turnoffcam() {
+    //   this.showModal = false;
+    //   this.$refs.video.srcObject.getTracks().forEach((track) => {
+    //     track.stop();
+    //   });
+    // },
+    // async loginwithface() {
+    //   const video = this.$refs.video;
+    //   const canvas = document.createElement("canvas");
+    //   const context = canvas.getContext("2d");
+    //   canvas.width = video.videoWidth;
+    //   canvas.height = video.videoHeight;
+    //   context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    //   const data = canvas.toDataURL("image/png");
+    //   var form = new FormData();
+    //   form.append("image", data);
+    //   await axios({
+    //     url: "https://api.chooch.ai/predict/face?person_id_filter=-1&model_id=14&apikey=426e5c84-7d52-4d7a-b0b6-afdc078ca398",
+    //     method: "POST",
+    //     data: form,
+    //     headers: {
+    //       'Content-Type': 'multipart/form-data'
+    //     }
+    //   })
+    //     .then(response => {
+    //       console.log(response);
+    //     })
+    //     .catch(error => {
+    //       console.error(error);
+    //     });
+    // },
+    // authenticate() {
+    //   navigator.mediaDevices.getUserMedia({ video: true })
+    //     .then((stream) => {
+    //       this.$refs.video.srcObject = stream;
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // },
     async login() {
       try {
         //this.$router.push("/dashboard");
