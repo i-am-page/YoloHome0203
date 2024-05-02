@@ -164,6 +164,7 @@ export default {
             return this.Data ? this.Data.fan == 0 : false;
         },
         isFanOne() {
+            console.log(this.Data? this.Data.fan : -999);
             return this.Data ? this.Data.fan == 100 : false;
         },
     }

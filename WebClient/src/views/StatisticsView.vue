@@ -67,7 +67,7 @@ export default {
         this.interval = setInterval(() => {
             this.updateData();
             this.getData();
-        }, 15000);
+        }, 60000);
     },
     methods: {
         async exportExcel() {

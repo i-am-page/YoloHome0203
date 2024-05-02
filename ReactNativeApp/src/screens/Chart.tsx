@@ -120,7 +120,7 @@ export const Chart = (account: any) => {
     const interval = setInterval(() => {
       getData();
     }
-      , 300000);
+      , 60000);
     return () => clearInterval(interval);
   }, []);
 

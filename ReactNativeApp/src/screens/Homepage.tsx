@@ -34,7 +34,7 @@ export const Homepage = (account: any) => {
   };
   useEffect(() => {
     refresh();
-    const intervalId = setInterval(refresh, 15000);
+    const intervalId = setInterval(refresh, 60000);
     // Clear the interval when the component unmounts
     return () => {
       clearInterval(intervalId);
@@ -286,7 +286,7 @@ export const Homepage = (account: any) => {
                 },
               ]}
               onPress={() => {
-                switchFan(1);
+                switchFan(100);
               }}
             >
               <Text> {(data as any) ? "Bật" : "N/A"} </Text>

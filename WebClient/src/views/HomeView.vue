@@ -8,7 +8,7 @@ import Inputa from "../components/InputField.vue";
       <div
         class="w-100 h-100 w-full rounded-lg bg-opacity-50 backdrop-blur-md bg-white shadow md:mt-0 sm:max-w-md xl:p-0">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <h1 class="text-xl font-bold text-center leading-tight tracking-tight md:text-2xl ">
+          <h1 class="text-xl font-bold text-center leading-tight tracking-tight md:text-2xl">
             Smart Home Mangement
           </h1>
           <form class="space-y-4 md:space-y-6" action="#">
@@ -68,5 +68,5 @@ export default {
   },
 };
 </script>
-<style src='../assets/main.css'></style>
 
+<style src='../assets/main.css'></style>
