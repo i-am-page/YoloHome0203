@@ -19,6 +19,7 @@ export const Login = () => {
   const [password, setPassword] = useState('');
   const handleLogIn = async () => {
     try{
+      console.log(username, password)
       const res = await apiFacade.login(username, password);
       console.log(res);
       if (res != "Invalid password") {
@@ -35,7 +36,6 @@ export const Login = () => {
     try {
       await AsyncStorage.setItem('token', token);
     } catch (e) {
-      // saving error
       console.log(e);
     }
   }

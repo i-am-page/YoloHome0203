@@ -33,7 +33,8 @@ import Navigation from "../components/Navigation.vue";
                                 <div class="flex flex-1 flex-col mt-6 border border-2 border-solid bg-slate-50">
                                     <label class="font-semibold text-xl text-center ">Temperature</label>
                                     <div class="gauge-container">
-                                        <gauge :value="28" :threshold="75" :min="0" :max="100" :decimals="0"></gauge>
+                                        <gauge :value="this.Data.temp" :threshold=" 75 " :min=" 0 "
+                                            :max=" 100 " :decimals=" 0 "></gauge>
                                     </div>
 
 
@@ -43,13 +44,13 @@ import Navigation from "../components/Navigation.vue";
                                 <div class="flex flex-1 flex-col mt-6 border border-2 border-solid bg-slate-50">
                                     <label class="font-semibold text-xl text-center ">Humidity</label>
                                     <div class="gauge-container">
-                                        <gauge :value="28" :threshold="75" :min="0" :max="100" :decimals="0"></gauge>
+                                        <gauge :value="this.Data.humid" :threshold=" 75 " :min=" 0 " :max=" 100 " :decimals=" 0 "></gauge>
                                     </div>
                                 </div>
                                 <div class="flex flex-1 flex-col mt-6 border border-2 border-solid bg-slate-50">
                                     <label class="font-semibold text-xl text-center ">Luminosity</label>
                                     <div class="gauge-container">
-                                        <gauge :value="30" :threshold="75" :min="0" :max="100" :decimals="0"></gauge>
+                                        <gauge :value="this.Data.luminosity" :threshold=" 75 " :min=" 0 " :max=" 100 " :decimals=" 0 "></gauge>
                                     </div>
                                 </div>
                             </div>
@@ -60,8 +61,8 @@ import Navigation from "../components/Navigation.vue";
 
                                 <div class="flex flex-1 flex-col gap-5">
                                     <div class="flex-1 flex justify-center">
-                                        <button @click="switchFan"
-                                            :class="{ 'bg-blue-100': fan === 0, 'bg-blue-400': fan === 1 }" class="justify-center justify-center items-center hover:bg-blue-200
+                                        <button @click=" switchFan "
+                                            :class=" { 'bg-blue-100': fan === 0, 'bg-blue-400': fan === 1 } " class="justify-center justify-center items-center hover:bg-blue-200
                                             text-blue font-bold rounded px-10 py-10 shadow-md flex flex-col gap-5">
                                             <label class="font-semibold text-xl text-center text-">Fan</label>
                                             <div class="icon-container bg-blue-300 rounded-full px-4 py-4 shadow-md">
@@ -77,8 +78,8 @@ import Navigation from "../components/Navigation.vue";
 
                                 <div class="flex flex-1 flex-col gap-5">
                                     <div class="flex-1 flex justify-center">
-                                        <button @click="switchLight"
-                                            :class="{ 'bg-red-100': light === 0, 'bg-red-400': light === 1 }"
+                                        <button @click=" switchLight "
+                                            :class=" { 'bg-red-100': light === 0, 'bg-red-400': light === 1 } "
                                             class="hover:bg-red-200
                                             text-blue font-bold rounded px-10 py-10 shadow-md justify-center items-center flex flex-col gap-5">
                                             <label class="font-semibold text-xl text-center">Light</label>
@@ -94,8 +95,8 @@ import Navigation from "../components/Navigation.vue";
                                 </div>
                                 <div class="flex flex-1 flex-col gap-5">
                                     <div class="flex-1 flex justify-center">
-                                        <button @click="startSpeechRecognition"
-                                            :class="{ 'bg-amber-100': isListening === false, 'bg-amber-400': isListening === true }"
+                                        <button @click=" startSpeechRecognition "
+                                            :class=" { 'bg-amber-100': isListening === false, 'bg-amber-400': isListening === true } "
                                             class="justify-center items-center  hover:bg-amber-200 
                                             text-blue font-bold rounded px-10 py-10 shadow-md flex flex-col gap-5">
                                             <label class="font-semibold text-xl text-center ">Assistant</label>
