@@ -13,12 +13,12 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
 import { Notifications } from "react-native-notifications";
 type RootStackParamList = {
-  Home: undefined;
-  Login: undefined;
-  Chart: undefined;
+  Dashboard: undefined;
+  SignIn: undefined;
+  Graphs: undefined;
   // Add other screens here
 };
-type NavigationProp = StackNavigationProp<RootStackParamList, "Home">;
+type NavigationProp = StackNavigationProp<RootStackParamList, "Dashboard">;
 export const Homepage = (account: any) => {
   const navigation = useNavigation<NavigationProp>();
   const [data, setData] = useState(null);
@@ -51,7 +51,7 @@ export const Homepage = (account: any) => {
   const dateTime = new Date((data as any)?.time);
   var date = ``;
   if ((dateTime.getMonth()+1)>10) {
-    if ((dateTime.getDate()>10)) {
+    if ((dateTime.getDate()>=10)) {
         date = `${dateTime.getDate()}/${
         dateTime.getMonth() + 1
       }/${dateTime.getFullYear()}`;
@@ -61,7 +61,7 @@ export const Homepage = (account: any) => {
       }/${dateTime.getFullYear()}`;
     }
   } else {
-    if ((dateTime.getDate() > 10)) {
+    if ((dateTime.getDate() >= 10)) {
       date = `${dateTime.getDate()}/0${
         dateTime.getMonth() + 1
       }/${dateTime.getFullYear()}`;
@@ -73,16 +73,16 @@ export const Homepage = (account: any) => {
   }
   var time = ``;
   const hour = (dateTime.getHours() + 17 < 24) ? (dateTime.getHours() + 17) : (dateTime.getHours() - 7)
-  if (hour > 10) {
-    if (dateTime.getMinutes() > 10) {
-      if (dateTime.getSeconds() > 10) {
+  if (hour >= 10) {
+    if (dateTime.getMinutes() >= 10) {
+      if (dateTime.getSeconds() >= 10) {
         time = `${hour}:${dateTime.getMinutes()}:${dateTime.getSeconds()}`
       }
       else {
         time = `${hour}:${dateTime.getMinutes()}:0${dateTime.getSeconds()}`
       }
     } else {
-      if (dateTime.getSeconds() > 10) {
+      if (dateTime.getSeconds() >= 10) {
         time = `${hour}:0${dateTime.getMinutes()}:${dateTime.getSeconds()}`
       }
       else {
@@ -90,15 +90,15 @@ export const Homepage = (account: any) => {
       }
     }
   } else {
-    if (dateTime.getMinutes() > 10) {
-      if (dateTime.getSeconds() > 10) {
+    if (dateTime.getMinutes() >= 10) {
+      if (dateTime.getSeconds() >= 10) {
         time = `0${hour}:${dateTime.getMinutes()}:${dateTime.getSeconds()}`
       }
       else {
         time = `0${hour}:${dateTime.getMinutes()}:0${dateTime.getSeconds()}`
       }
     } else {
-      if (dateTime.getSeconds() > 10) {
+      if (dateTime.getSeconds() >= 10) {
         time = `0${hour}:0${dateTime.getMinutes()}:${dateTime.getSeconds()}`
       }
       else {
@@ -147,7 +147,7 @@ export const Homepage = (account: any) => {
             />
           </View>
           <Text style={[styles.main, {fontStyle:"italic", fontSize:15}]}>
-            {(data as any) ? (data as any).temp + "độ C" : "Loading"}
+            {(data as any) ? (data as any).temp + "°C" : "Loading"}
           </Text>
         </View>
       </View>
@@ -175,7 +175,7 @@ export const Homepage = (account: any) => {
             />
           </View>
           <Text style={[styles.main, {fontStyle:"italic", fontSize:15}]}>
-            {(data as any) ? (data as any).lightvalue + "lux" : "Loading"}
+            {(data as any) ? (data as any).lightvalue + " lux" : "Loading"}
           </Text>
         </View>
       </View>
@@ -194,11 +194,11 @@ export const Homepage = (account: any) => {
               width: '50%',
             }, styles.row]}>
           <Text style={{color: "black", fontSize: 18, fontStyle: "italic", marginLeft: 10}}>
-            Thiết bị
+            Điều khiển thiết bị
           </Text>
           <Image
                 source={require("../../assets/images/flipswitch.png")}
-                style={[{ width: 50, height: 20, marginRight: 50, aspectRatio: 2, marginTop:2 }]}
+                style={[{ width: 50, height: 20, marginLeft: 10, aspectRatio: 2, marginTop:2 }]}
               />
         </View>
         <View style={[styles.routineTable, {marginRight:115, backgroundColor: "transparent"}]}>
@@ -233,7 +233,7 @@ export const Homepage = (account: any) => {
                 styles.routineCell,
                 {
                   backgroundColor:
-                    (data as any) && (data as any).light == 1
+                    (data as any) && (data as any).light > 0
                       ? "#00ff1a" //Bật đèn
                       : "#ffd000",
                   borderTopRightRadius: 10,
@@ -278,7 +278,7 @@ export const Homepage = (account: any) => {
                 styles.routineCell,
                 {
                   backgroundColor:
-                    (data as any) && (data as any).fan == 100
+                    (data as any) && (data as any).fan > 0
                       ? "#00ff1a" //Bật quạt
                       : "#ffd000",
                   borderTopRightRadius: 10,
@@ -297,7 +297,7 @@ export const Homepage = (account: any) => {
       <View
         style={{
           position: "absolute",
-          left: 100,
+          left: 115,
           right: 0,
           bottom: 20,
           flexDirection: "row",
@@ -312,14 +312,14 @@ export const Homepage = (account: any) => {
             padding: 13,
             borderWidth: 1,
             borderColor: "#000",
-            borderTopLeftRadius: 10,
-            borderBottomLeftRadius: 10,
+            borderRadius: 10,
+            marginRight:110,
           }}
           onPress={() => {
-            navigation.navigate("Home", account.route.params);
+            navigation.navigate("Dashboard", account.route.params);
           }}
         >
-          <Text style={{fontWeight:'bold', fontStyle:'italic'}}>Home</Text>
+          <Text style={{fontWeight:'bold', fontStyle:'italic'}}>DBoard</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={{
@@ -327,14 +327,14 @@ export const Homepage = (account: any) => {
             padding: 13,
             borderWidth: 1,
             borderColor: "#000",
-            borderTopRightRadius: 10,
-            borderBottomRightRadius: 10,
+            borderRadius:10,
+            marginLeft:110,
           }}
           onPress={() => {
-            navigation.navigate("Chart", account.route.params);
+            navigation.navigate("Graphs", account.route.params);
           }}
         >
-          <Text style={{fontStyle:'italic'}}>Chart</Text>
+          <Text style={{fontStyle:'italic'}}>Graphs</Text>
         </TouchableOpacity>
       </View>
     </View>

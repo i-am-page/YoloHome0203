@@ -4,10 +4,10 @@
     "slug": "my-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/reload.gif",
+    "icon": "./assets/images/reload.gif",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/reload.gif",
+      "image": "./assets/images/reload.gif",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/reload.gif",
+        "foregroundImage": "./assets/images/reload.gif",
         "backgroundColor": "#ffffff"
       }
     },
