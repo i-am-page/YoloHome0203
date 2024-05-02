@@ -17,7 +17,7 @@ return (
         <Stack.Screen name="Dashboard" component={Homepage} />
         <Stack.Screen name="SignIn" component={Login} />
         <Stack.Screen name="Graphs" component={Chart} />
-        <Stack.Screen name="Signup" component={Signup} />
+        <Stack.Screen name="SignUp" component={Signup} />
       </Stack.Navigator>
     </NavigationContainer>
   );
