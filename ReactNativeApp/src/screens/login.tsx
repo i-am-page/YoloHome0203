@@ -8,7 +8,7 @@ type RootStackParamList = {
   Dashboard: undefined;
   SignIn: undefined;
   Chart: undefined;
-  Signup: undefined;
+  SignUp: undefined;
   // Add other screens here
 };
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
@@ -19,9 +19,9 @@ export const Login = () => {
   const [password, setPassword] = useState('');
   const handleLogIn = async () => {
     try{
-      console.log(username, password)
+      // console.log(username, password)
       const res = await apiFacade.login(username, password);
-      console.log(res);
+      // console.log(res);
       if (res != "Invalid password") {
         saveToken(res.token);
         navigation.replace('Dashboard', res);
@@ -41,7 +41,7 @@ export const Login = () => {
 
   }
   const createAccount = () => {
-    navigation.navigate('Signup');
+    navigation.navigate('SignUp');
   };
   return (
     <View style={styles.container}>

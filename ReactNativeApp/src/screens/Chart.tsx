@@ -247,12 +247,12 @@ export const Chart = (account: any) => {
             borderWidth: 1,
             borderColor: "#000",
             borderRadius:10,
-            marginRight:110,
+            marginRight:60,
           }} onPress={() => { navigation.navigate("Dashboard",account.route.params) }}>
           <Text style={{ }}>DBoard</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{
-            marginLeft: 110,
+            marginLeft: 60,
             backgroundColor: "#03fc5a",
             padding: 13,
             borderWidth: 1,

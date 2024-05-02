@@ -7,7 +7,7 @@ type RootStackParamList = {
   Dashboard: undefined;
   SignIn: undefined;
   Graphs: undefined;
-  Signup: undefined;
+  SignUp: undefined;
   // Add other screens here
 };
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
@@ -18,9 +18,9 @@ export const Signup = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const handleSignUp = async () => {
-    console.log(username);
-    console.log(nickname);
-    console.log(password);
+    // console.log(username);
+    // console.log(nickname);
+    // console.log(password);
     const res = await apiFacade.signup(username,nickname,password);
     if (res != "Existing Account") {
       console.log("Account Inavailable");

@@ -181,7 +181,7 @@ export const Homepage = (account: any) => {
       </View>
       <View style={[{
         marginTop: 40,
-        marginRight: 40,
+        alignSelf:'center',
         backgroundColor: '#f0f0f0',
         borderRadius: 25,
         borderColor: "black",
@@ -216,7 +216,7 @@ export const Homepage = (account: any) => {
                 {
                   backgroundColor:
                     (data as any) && (data as any).light == 0
-                      ? "#ff0000" //Tắt đèn
+                      ? "#ff9900" //Tắt đèn
                       : "#ffd000",
                   borderTopLeftRadius: 10,
                   borderBottomLeftRadius: 10,
@@ -234,7 +234,7 @@ export const Homepage = (account: any) => {
                 {
                   backgroundColor:
                     (data as any) && (data as any).light > 0
-                      ? "#00ff1a" //Bật đèn
+                      ? "#ff9900" //Bật đèn
                       : "#ffd000",
                   borderTopRightRadius: 10,
                   borderBottomRightRadius: 10,
@@ -261,7 +261,7 @@ export const Homepage = (account: any) => {
                 {
                   backgroundColor:
                     (data as any) && (data as any).fan == 0
-                      ? "#ff0000" //Tắt quạt
+                      ? "#ff9900" //Tắt quạt
                       : "#ffd000",
                   borderTopLeftRadius: 10,
                   borderBottomLeftRadius: 10,
@@ -279,7 +279,7 @@ export const Homepage = (account: any) => {
                 {
                   backgroundColor:
                     (data as any) && (data as any).fan > 0
-                      ? "#00ff1a" //Bật quạt
+                      ? "#ff9900" //Bật quạt
                       : "#ffd000",
                   borderTopRightRadius: 10,
                   borderBottomRightRadius: 10,
@@ -313,7 +313,7 @@ export const Homepage = (account: any) => {
             borderWidth: 1,
             borderColor: "#000",
             borderRadius: 10,
-            marginRight:110,
+            marginRight:60,
           }}
           onPress={() => {
             navigation.navigate("Dashboard", account.route.params);
@@ -328,7 +328,7 @@ export const Homepage = (account: any) => {
             borderWidth: 1,
             borderColor: "#000",
             borderRadius:10,
-            marginLeft:110,
+            marginLeft:60,
           }}
           onPress={() => {
             navigation.navigate("Graphs", account.route.params);
