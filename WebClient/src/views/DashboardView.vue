@@ -24,50 +24,35 @@ import Navigation from "../components/Navigation.vue";
                         </h1>
                     </div>
                     <!-- ------------------------------------------------- -->
-                    
-                    
+
+
                     <div class="flex flex-col gap-8">
-                        
+
                         <div class="flex-1 flex flex-col justify-center ">
                             <div class="flex flex-1 md:flex-row gap-10 items-center">
-                                <div class ="flex flex-1 flex-col mt-6 border border-2 border-solid bg-slate-50">
+                                <div class="flex flex-1 flex-col mt-6 border border-2 border-solid bg-slate-50">
                                     <label class="font-semibold text-xl text-center ">Temperature</label>
                                     <div class="gauge-container">
-                                        <gauge
-                                            :value="28"
-                                            :threshold="75"
-                                            :min="0"
-                                            :max="100"
-                                            :decimals="0"
-                                        ></gauge>
+                                        <gauge :value="Data ? Data.temp : 0" :threshold="75" :min="0" :max="100"
+                                            :decimals="0"></gauge>
                                     </div>
 
-                                
-                                </div>            
+
+                                </div>
 
 
-                                <div class ="flex flex-1 flex-col mt-6 border border-2 border-solid bg-slate-50">
+                                <div class="flex flex-1 flex-col mt-6 border border-2 border-solid bg-slate-50">
                                     <label class="font-semibold text-xl text-center ">Humidity</label>
                                     <div class="gauge-container">
-                                        <gauge
-                                            :value="28"
-                                            :threshold="75"
-                                            :min="0"
-                                            :max="100"
-                                            :decimals="0"
-                                        ></gauge>
+                                        <gauge :value="Data ? Data.humidity : 0" :threshold="75" :min="0" :max="100"
+                                            :decimals="0"></gauge>
                                     </div>
                                 </div>
-                                <div class ="flex flex-1 flex-col mt-6 border border-2 border-solid bg-slate-50">
+                                <div class="flex flex-1 flex-col mt-6 border border-2 border-solid bg-slate-50">
                                     <label class="font-semibold text-xl text-center ">Luminosity</label>
-                                    <div class="gauge-container" >
-                                        <gauge
-                                            :value="30"
-                                            :threshold="75"
-                                            :min="0"
-                                            :max="100"
-                                            :decimals="0"
-                                        ></gauge>
+                                    <div class="gauge-container">
+                                        <gauge :value="Data ? Data.lightvalue : 0" :threshold="75" :min="0" :max="100"
+                                            :decimals="0"></gauge>
                                     </div>
                                 </div>
                             </div>
@@ -76,61 +61,56 @@ import Navigation from "../components/Navigation.vue";
                         <div class="flex-1 flex flex-col justify-center">
                             <div class="flex flex-row flex-1 gap-10 items-center">
 
-                                <div class = "flex flex-1 flex-col gap-5">
-                                    <div class = "flex-1 flex justify-center">
+                                <div class="flex flex-1 flex-col gap-5">
+                                    <div class="flex-1 flex justify-center">
                                         <button @click="switchFan"
-                                            :class="{'bg-blue-100': fan === 0, 'bg-blue-400': fan === 1 }" 
-                                            class="justify-center justify-center items-center hover:bg-blue-200
+                                            :class="{ 'bg-blue-100': isFanZero, 'bg-blue-400': isFanOne }" class="justify-center justify-center items-center hover:bg-blue-200
                                             text-blue font-bold rounded px-10 py-10 shadow-md flex flex-col gap-5">
                                             <label class="font-semibold text-xl text-center text-">Fan</label>
                                             <div class="icon-container bg-blue-300 rounded-full px-4 py-4 shadow-md">
-                                                <svg 
-                                                    xmlns="http://www.w3.org/2000/svg" 
-                                                    fill="none" viewBox="0 0 24 24" stroke-width="2.0" 
-                                                    stroke="currentColor" 
-                                                >
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="2.0" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
                                                 </svg>
-                                            </div>     
+                                            </div>
                                         </button>
-                                    </div>  
+                                    </div>
                                 </div>
 
-                                <div class = "flex flex-1 flex-col gap-5">
-                                    <div class = "flex-1 flex justify-center">
+                                <div class="flex flex-1 flex-col gap-5">
+                                    <div class="flex-1 flex justify-center">
                                         <button @click="switchLight"
-                                            :class="{'bg-red-100': light === 0, 'bg-red-400': light === 1 }" 
-                                            class = "hover:bg-red-200
+                                            :class="{ 'bg-red-100': isLightZero, 'bg-red-400': isLightOne }"
+                                            class="hover:bg-red-200
                                             text-blue font-bold rounded px-10 py-10 shadow-md justify-center items-center flex flex-col gap-5">
                                             <label class="font-semibold text-xl text-center">Light</label>
                                             <div class="icon-container bg-red-300 rounded-full px-4 py-4 shadow-md">
-                                                <svg xmlns="http://www.w3.org/2000/svg" 
-                                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5" 
-                                                    stroke="currentColor" 
-                                                    >
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
-                                            </svg>
-                                            </div>     
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                                                </svg>
+                                            </div>
                                         </button>
-                                    </div>  
+                                    </div>
                                 </div>
-                                <div class = "flex flex-1 flex-col gap-5">
-                                    <div class = "flex-1 flex justify-center">
+                                <div class="flex flex-1 flex-col gap-5">
+                                    <div class="flex-1 flex justify-center">
                                         <button @click="startSpeechRecognition"
-                                            :class = "{'bg-amber-100': isListening === false, 'bg-amber-400': isListening === true}"
+                                            :class="{ 'bg-amber-100': isListening == false, 'bg-amber-400': isListening == true }"
                                             class="justify-center items-center  hover:bg-amber-200 
                                             text-blue font-bold rounded px-10 py-10 shadow-md flex flex-col gap-5">
                                             <label class="font-semibold text-xl text-center ">Assistant</label>
                                             <div class="icon-container bg-amber-300 rounded-full px-4 py-4 shadow-md">
-                                                <svg xmlns="http://www.w3.org/2000/svg" 
-                                                    fill="none" viewBox="0 0 24 24" 
-                                                    stroke-width="1.5" stroke="currentColor" 
-                                                    >
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" />
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" />
                                                 </svg>
-                                            </div>     
+                                            </div>
                                         </button>
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -165,6 +145,7 @@ export default {
     },
     mounted() {
         this.getData();
+        console.log(this.Data);
         this.interval = setInterval(() => {
             this.getData();
         }, 60000);
@@ -172,7 +153,21 @@ export default {
     beforeDestroy() {
         clearInterval(this.interval);
     },
-
+    computed: {
+        isLightZero() {
+            return this.Data ? this.Data.light == 0 : false;
+        },
+        isLightOne() {
+            return this.Data ? this.Data.light == 1 : false;
+        },
+        isFanZero() {
+            return this.Data ? this.Data.fan == 0 : false;
+        },
+        isFanOne() {
+            return this.Data ? this.Data.fan == 100 : false;
+        },
+    }
+    ,
     methods: {
         async getData() {
             try {
@@ -181,42 +176,40 @@ export default {
                 this.Data = await res.data;
                 console.log(this.Data)
             } catch (error) {
-               // console.log(error);
-               // this.$router.push("/unauthorized");
+                console.log(error);
+                this.$router.push("/unauthorized");
             }
 
         },
         async switchLight() {
-            //const val = this.Data.light == 0 ? 1 : 0;
-            //console.log(val);
-            //const res = await axios.post("/record/store", {
-             //   light: val
-            //});
-
-            this.light = this.light === 1 ? 0 : 1; 
+            const val = this.Data.light == 0 ? 1 : 0;
+            this.Data.light = val;
+            console.log(val);
+            const res = await axios.post("/record/store", {
+                light: val
+            });
         },
         async switchFan() {
-            //const val = this.Data.fan == 0 ? 100 : 0;
-          //  console.log(val);
-            //const res = await axios.post("/record/store", {
-             //   fan: val
-           // });
-
-           this.fan = this.fan === 1 ? 0 : 1;
+            const val = this.Data.fan == 0 ? 100 : 0;
+            this.Data.fan = val;
+            console.log(val);
+            const res = await axios.post("/record/store", {
+                fan: val
+            });
         },
         startSpeechRecognition() {
-        /*    this.isListening = true;
-            const recognition = new window.webkitSpeechRecognition();
+            this.isListening = true;
+            const recognition = new window.webkitSpeechRecognition() || new window.SpeechRecognition();
             recognition.lang = 'en-US';
-
             recognition.onresult = (event) => {
+                console.log("working")
                 this.recognizedText = event.results[0][0].transcript;
                 console.log(this.recognizedText);
                 // Processing logic moved inside onresult event handler
                 const enspeech = this.recognizedText.split(" ");
                 console.log(enspeech);
-                if (enspeech[0] == "Turn") {
-                    console.log("Turn");
+                if (enspeech[0] == "turn") {
+                    console.log("turn");
                     if (enspeech[1] == "on") {
                         console.log("on");
                         if (enspeech[3] == "light") {
@@ -238,14 +231,12 @@ export default {
                     }
                 }
             };
-
             recognition.onend = () => {
                 this.isListening = false;
             };
+            recognition.start();
 
-            recognition.start(); */
-
-            this.isListening =  this.isListening === false ? true : false;
+            //this.isListening = this.isListening === false ? true : false;
 
         }
     },
@@ -255,13 +246,14 @@ export default {
 
 <style lang="scss" scoped>
 .gauge-container {
-  width: 100%;
-  max-width: 100%;
-  margin-left: auto;
-  margin-right: auto;
+    width: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }
-.icon-container{
-    width: 4rem; 
+
+.icon-container {
+    width: 4rem;
     height: 4rem;
 }
 </style>

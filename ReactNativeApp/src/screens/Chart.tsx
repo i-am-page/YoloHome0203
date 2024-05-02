@@ -117,6 +117,11 @@ export const Chart = (account: any) => {
       }
     };
     getData();
+    const interval = setInterval(() => {
+      getData();
+    }
+      , 300000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
