@@ -126,7 +126,6 @@ exports.Index = async function (req, res) {
 exports.Store = async function (req, res) {
     try {
         const data = req.body;
-        console.log(data)
         //add data to adafruit
         if (!(data.light === undefined)) {
             await addDataToAdafruit('https://io.adafruit.com/api/v2/webhooks/feed/EV7Kr8ULbGybCr8BVufY11GMJ6eB', data.light);
@@ -147,7 +146,6 @@ exports.Export = async function (req, res) {
     try {
         const start = new Date(req.query.start)
         const end = new Date(req.query.end)
-        console.log(start, end);
         const recordRef = collection(db, 'record');
         const q = query(recordRef, orderBy('time', 'desc'), limit(1000));
         const records = await getDocs(q);
@@ -155,19 +153,59 @@ exports.Export = async function (req, res) {
             res.status(400).send('No records found');
         } else {
             const datas = records.docs.map((doc) => {
-                return {
-                    time: doc.data().time,
-                    temp: doc.data().temp,
-                    light: doc.data().light,
-                    humidity: doc.data().humidity,
-                    lightvalue: doc.data().lightvalue,
+                const time = new Date(doc.data().time);
+                if (time >= start && time <= end) {
+                    return {
+                        time: doc.data().time,
+                        temp: doc.data().temp,
+                        light: doc.data().light,
+                        humidity: doc.data().humidity,
+                        lightvalue: doc.data().lightvalue,
+                    }
                 }
             }
             );
 
+            const avgdata = () => {
+                const sums = {};
+                const counts = {};
+
+                datas.forEach((data) => {
+                    if (data) {
+                        const date = data.time.split('T')[0];
+                        if (!sums[date]) {
+                            sums[date] = {
+                                temp: 0,
+                                humidity: 0,
+                                lightvalue: 0
+                            };
+                            counts[date] = 0;
+                        }
+                        sums[date].temp += parseFloat(data.temp);
+                        sums[date].humidity += parseFloat(data.humidity);
+                        sums[date].lightvalue += parseFloat(data.lightvalue);
+                        counts[date]++;
+                    }
+                });
+                const averages = {};
+                for (const date in sums) {
+                    
+                    averages[date] = {
+                        date: date,
+                        avgTemperature: (sums[date].temp / counts[date]).toFixed(2),
+                        avgHumidity: (sums[date].humidity / counts[date]).toFixed(2),
+                        avgLuminosity: (sums[date].lightvalue / counts[date]).toFixed(2)
+                    };
+                }
+
+                return averages;
+            };
+
+            const avgdatas = avgdata(); 
+            
+
             // Create a worksheet from your data
-            const ws = XLSX.utils.json_to_sheet(datas);
-            console.log(ws);
+            const ws = XLSX.utils.json_to_sheet(Object.values(avgdatas));
             // Create a workbook and add the worksheet
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'Data');
@@ -177,14 +215,14 @@ exports.Export = async function (req, res) {
             // Write the XLSX file to the temp path
             XLSX.writeFile(wb, tempFilePath);
             // Send the file as a response
-            // res.download(tempFilePath, 'exported-data.xlsx', () => {
-            //     // After the file is sent, delete the temporary file
-            //     fs.unlink(tempFilePath, (err) => {
-            //         if (err) {
-            //             console.error('Error deleting temporary file:', err);
-            //         }
-            //     });
-            // });
+            res.download(tempFilePath, 'temp.xlsx', () => {
+                // After the file is sent, delete the temporary file
+                fs.unlink(tempFilePath, (err) => {
+                    if (err) {
+                        console.error('Error deleting temporary file:', err);
+                    }
+                });
+            });
 
         }
     } catch (error) {

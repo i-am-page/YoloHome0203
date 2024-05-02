@@ -41,7 +41,7 @@ import {
     Title,
     Tooltip,
     Legend,
-    
+
 } from 'chart.js'
 ChartJS.register(
     CategoryScale,
@@ -71,21 +71,27 @@ export default {
     },
     methods: {
         async exportExcel() {
-            const startDate = document.getElementById("start-date").value;
-            const endDate = document.getElementById("end-date").value;
-            console.log(startDate, endDate);
             try {
+                const startDate = document.getElementById("start-date").value;
+                const endDate = document.getElementById("end-date").value;
+
                 const res = await axios.get(`/export?start=${startDate}&end=${endDate}`,
-                    { headers: { authorization: `Bearer ${localStorage.getItem("token")}` } },{ responseType: 'blob' }).then((response) => {
-                        const url = URL.createObjectURL(new Blob([response.data]));
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.setAttribute('download', 'data.xlsx');
-                        document.body.appendChild(link);
-                        link.click();
+                    {
+                        headers: {
+                            authorization: `Bearer ${localStorage.getItem("token")}`,
+                            Accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                        }, responseType: 'blob'
                     });
+                const url = URL.createObjectURL(new Blob([res.data], {
+                    type: 'application/vnd.ms-excel'
+                }))
+                const link = document.createElement('a')
+                link.href = url
+                link.setAttribute('download', 'data.xlsx')
+                document.body.appendChild(link)
+                link.click()
             } catch (error) {
-                console.log(error);
+                console.error(error)
             }
         },
         async updateData() {
@@ -110,7 +116,7 @@ export default {
                             pointRadius: 0,
                             tension: 0.3,
                             borderColor: '#f87979',
-                            fill : true,
+                            fill: true,
                             borderWidth: 4
                         },
                         {
@@ -121,7 +127,7 @@ export default {
                             tension: 0.3,
                             borderColor: '#00BFFF',
                             borderWidth: 4
-                            
+
                         },
                         {
                             label: 'Luminosity',
