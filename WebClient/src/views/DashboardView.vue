@@ -146,9 +146,9 @@ export default {
     mounted() {
         this.getData();
         console.log(this.Data);
-        // this.interval = setInterval(() => {
-        //     this.getData();
-        // }, 60000);
+        this.interval = setInterval(() => {
+            this.getData();
+        }, 60000);
     },
     beforeDestroy() {
         clearInterval(this.interval);
@@ -188,8 +188,6 @@ export default {
             const res = await axios.post("/record/store", {
                 light: val
             });
-
-            //this.light = this.light === 1 ? 0 : 1; 
         },
         async switchFan() {
             const val = this.Data.fan == 0 ? 100 : 0;
@@ -198,14 +196,11 @@ export default {
             const res = await axios.post("/record/store", {
                 fan: val
             });
-
-            //this.fan = this.fan === 1 ? 0 : 1;
         },
         startSpeechRecognition() {
             this.isListening = true;
-            const recognition = new window.webkitSpeechRecognition();
+            const recognition = new window.webkitSpeechRecognition() || new window.SpeechRecognition();
             recognition.lang = 'en-US';
-            console.log("in func listening");
             recognition.onresult = (event) => {
                 console.log("working")
                 this.recognizedText = event.results[0][0].transcript;
@@ -213,8 +208,8 @@ export default {
                 // Processing logic moved inside onresult event handler
                 const enspeech = this.recognizedText.split(" ");
                 console.log(enspeech);
-                if (enspeech[0] == "Turn") {
-                    console.log("Turn");
+                if (enspeech[0] == "turn") {
+                    console.log("turn");
                     if (enspeech[1] == "on") {
                         console.log("on");
                         if (enspeech[3] == "light") {
@@ -236,11 +231,9 @@ export default {
                     }
                 }
             };
-
             recognition.onend = () => {
                 this.isListening = false;
             };
-
             recognition.start();
 
             //this.isListening = this.isListening === false ? true : false;
