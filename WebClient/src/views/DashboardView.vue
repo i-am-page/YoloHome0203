@@ -33,8 +33,8 @@ import Navigation from "../components/Navigation.vue";
                                 <div class="flex flex-1 flex-col mt-6 border border-2 border-solid bg-slate-50">
                                     <label class="font-semibold text-xl text-center ">Temperature</label>
                                     <div class="gauge-container">
-                                        <gauge :value="this.Data.temp?? 0" :threshold=" 75 " :min=" 0 "
-                                            :max=" 100 " :decimals=" 0 "></gauge>
+                                        <gauge :value="Data ? Data.temp : 0" :threshold="75" :min="0" :max="100"
+                                            :decimals="0"></gauge>
                                     </div>
 
 
@@ -44,13 +44,15 @@ import Navigation from "../components/Navigation.vue";
                                 <div class="flex flex-1 flex-col mt-6 border border-2 border-solid bg-slate-50">
                                     <label class="font-semibold text-xl text-center ">Humidity</label>
                                     <div class="gauge-container">
-                                        <gauge :value="this.Data.humidity" :threshold=" 75 " :min=" 0 " :max=" 100 " :decimals=" 0 "></gauge>
+                                        <gauge :value="Data ? Data.humidity : 0" :threshold="75" :min="0" :max="100"
+                                            :decimals="0"></gauge>
                                     </div>
                                 </div>
                                 <div class="flex flex-1 flex-col mt-6 border border-2 border-solid bg-slate-50">
                                     <label class="font-semibold text-xl text-center ">Luminosity</label>
                                     <div class="gauge-container">
-                                        <gauge :value="this.Data.lightvalue" :threshold=" 75 " :min=" 0 " :max=" 100 " :decimals=" 0 "></gauge>
+                                        <gauge :value="Data ? Data.lightvalue : 0" :threshold="75" :min="0" :max="100"
+                                            :decimals="0"></gauge>
                                     </div>
                                 </div>
                             </div>
@@ -61,8 +63,8 @@ import Navigation from "../components/Navigation.vue";
 
                                 <div class="flex flex-1 flex-col gap-5">
                                     <div class="flex-1 flex justify-center">
-                                        <button @click=" switchFan "
-                                            :class=" { 'bg-blue-100': this.Data.fan === 0, 'bg-blue-400': this.Data.fan === 1 } " class="justify-center justify-center items-center hover:bg-blue-200
+                                        <button @click="switchFan"
+                                            :class="{ 'bg-blue-100': isFanZero, 'bg-blue-400': isFanOne }" class="justify-center justify-center items-center hover:bg-blue-200
                                             text-blue font-bold rounded px-10 py-10 shadow-md flex flex-col gap-5">
                                             <label class="font-semibold text-xl text-center text-">Fan</label>
                                             <div class="icon-container bg-blue-300 rounded-full px-4 py-4 shadow-md">
@@ -78,8 +80,8 @@ import Navigation from "../components/Navigation.vue";
 
                                 <div class="flex flex-1 flex-col gap-5">
                                     <div class="flex-1 flex justify-center">
-                                        <button @click=" switchLight "
-                                            :class=" { 'bg-red-100': this.Data.light === 0, 'bg-red-400': this.Data.light === 1 } "
+                                        <button @click="switchLight"
+                                            :class="{ 'bg-red-100': isLightZero, 'bg-red-400': isLightOne }"
                                             class="hover:bg-red-200
                                             text-blue font-bold rounded px-10 py-10 shadow-md justify-center items-center flex flex-col gap-5">
                                             <label class="font-semibold text-xl text-center">Light</label>
@@ -95,8 +97,8 @@ import Navigation from "../components/Navigation.vue";
                                 </div>
                                 <div class="flex flex-1 flex-col gap-5">
                                     <div class="flex-1 flex justify-center">
-                                        <button @click=" startSpeechRecognition "
-                                            :class=" { 'bg-amber-100': isListening === false, 'bg-amber-400': isListening === true } "
+                                        <button @click="startSpeechRecognition"
+                                            :class="{ 'bg-amber-100': isListening == false, 'bg-amber-400': isListening == true }"
                                             class="justify-center items-center  hover:bg-amber-200 
                                             text-blue font-bold rounded px-10 py-10 shadow-md flex flex-col gap-5">
                                             <label class="font-semibold text-xl text-center ">Assistant</label>
@@ -143,6 +145,7 @@ export default {
     },
     mounted() {
         this.getData();
+        console.log(this.Data);
         // this.interval = setInterval(() => {
         //     this.getData();
         // }, 60000);
@@ -150,7 +153,21 @@ export default {
     beforeDestroy() {
         clearInterval(this.interval);
     },
-
+    computed: {
+        isLightZero() {
+            return this.Data ? this.Data.light == 0 : false;
+        },
+        isLightOne() {
+            return this.Data ? this.Data.light == 1 : false;
+        },
+        isFanZero() {
+            return this.Data ? this.Data.fan == 0 : false;
+        },
+        isFanOne() {
+            return this.Data ? this.Data.fan == 100 : false;
+        },
+    }
+    ,
     methods: {
         async getData() {
             try {
@@ -166,6 +183,7 @@ export default {
         },
         async switchLight() {
             const val = this.Data.light == 0 ? 1 : 0;
+            this.Data.light = val;
             console.log(val);
             const res = await axios.post("/record/store", {
                 light: val
@@ -175,19 +193,21 @@ export default {
         },
         async switchFan() {
             const val = this.Data.fan == 0 ? 100 : 0;
+            this.Data.fan = val;
             console.log(val);
             const res = await axios.post("/record/store", {
                 fan: val
             });
 
-            this.fan = this.fan === 1 ? 0 : 1;
+            //this.fan = this.fan === 1 ? 0 : 1;
         },
         startSpeechRecognition() {
             this.isListening = true;
             const recognition = new window.webkitSpeechRecognition();
             recognition.lang = 'en-US';
-
+            console.log("in func listening");
             recognition.onresult = (event) => {
+                console.log("working")
                 this.recognizedText = event.results[0][0].transcript;
                 console.log(this.recognizedText);
                 // Processing logic moved inside onresult event handler

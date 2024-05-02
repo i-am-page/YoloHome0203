@@ -62,7 +62,7 @@ export default {
         this.interval = setInterval(() => {
             this.updateData();
             this.getData();
-        }, 10000);
+        }, 15000);
     },
     methods: {
         async updateData() {
@@ -83,7 +83,7 @@ export default {
                         {
                             label: 'Temperature',
                             backgroundColor: '#f87979',
-                            data: [30,35,40,32,43,32,20,21,18,16],
+                            data: res.data.map(row => row.temp),
                             pointRadius: 0,
                             tension: 0.3,
                             borderColor: '#f87979',
@@ -93,7 +93,7 @@ export default {
                         {
                             label: 'Humidity',
                             backgroundColor: '#00BFFF',
-                            data: [55,45,40,42,53,32,40,21,38,36],
+                            data: res.data.map(row => row.humidity),
                             pointRadius: 0,
                             tension: 0.3,
                             borderColor: '#00BFFF',
@@ -103,7 +103,7 @@ export default {
                         {
                             label: 'Luminosity',
                             backgroundColor: '#32CD32',
-                            data: [33,45,34,56,35,36,38,39,40,42],
+                            data: res.data.map(row => row.lightvalue),
                             pointRadius: 0,
                             tension: 0.3,
                             borderColor: '#f8f879',
