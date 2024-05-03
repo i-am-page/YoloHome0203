@@ -33,7 +33,7 @@ import Navigation from "../components/Navigation.vue";
                                 <div class="flex flex-1 flex-col mt-6 border border-2 border-solid bg-slate-50">
                                     <label class="font-semibold text-xl text-center ">Temperature</label>
                                     <div class="gauge-container">
-                                        <gauge :value="Data ? Data.temp : 0" :threshold="75" :min="0" :max="100"
+                                        <gauge :value="Data ? Data.temp : 0" :threshold="35" :min="0" :max="50"
                                             :decimals="0"></gauge>
                                     </div>
 
@@ -44,7 +44,7 @@ import Navigation from "../components/Navigation.vue";
                                 <div class="flex flex-1 flex-col mt-6 border border-2 border-solid bg-slate-50">
                                     <label class="font-semibold text-xl text-center ">Humidity</label>
                                     <div class="gauge-container">
-                                        <gauge :value="Data ? Data.humidity : 0" :threshold="75" :min="0" :max="100"
+                                        <gauge :value="Data ? Data.humidity : 0" :threshold="60" :min="0" :max="100"
                                             :decimals="0"></gauge>
                                     </div>
                                 </div>
@@ -149,6 +149,9 @@ export default {
         this.interval = setInterval(() => {
             this.getData();
         }, 60000);
+        this.notifyInterval = setInterval(() => {
+            this.notify();
+        }, 1000);
     },
     beforeDestroy() {
         clearInterval(this.interval);
@@ -170,6 +173,20 @@ export default {
     }
     ,
     methods: {
+        notify(){
+            if (this.Data.temp > 35)
+            {
+                alert("You need to turn on the fan");
+            }
+            if (this.Data.humidity > 50)
+            {
+                alert("Humidity is above 50%");
+            }
+            if (this.Data.lightvalue > 75)
+            {
+                alert("Luminosity is above 75");
+            }
+        },
         async getData() {
             try {
                 const res = await axios.get("/record",
