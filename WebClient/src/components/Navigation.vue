@@ -62,7 +62,7 @@
                         <!-- Menu Item Auth Pages -->
                         <li>
                             <a class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out"
-                                href="/">
+                                @click="logout">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
@@ -90,8 +90,8 @@ import axios from "../fetch/axios";
 export default {
     methods: {
         async logout() {
-            const res = await axios.get("/logout");
-            this.$router.push("/login");
+            //const res = await axios.get("/logout");
+            this.$router.push("/");
         },
         changetodb() {
             this.$router.push("/dashboard");

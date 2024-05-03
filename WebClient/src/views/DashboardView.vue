@@ -226,7 +226,7 @@ export default {
                 // Processing logic moved inside onresult event handler
                 const enspeech = this.recognizedText.split(" ");
                 console.log(enspeech);
-                if (enspeech[0] == "turn") {
+                if (enspeech[0] == "turn" || enspeech[0] == "Turn") {
                     console.log("turn");
                     if (enspeech[1] == "on") {
                         console.log("on");

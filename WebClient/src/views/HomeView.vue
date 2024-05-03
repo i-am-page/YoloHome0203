@@ -11,7 +11,7 @@ import Inputa from "../components/InputField.vue";
           <h1 class="text-xl font-bold text-center leading-tight tracking-tight md:text-2xl">
             Smart Home Mangement
           </h1>
-          <form class="space-y-4 md:space-y-6" action="#">
+          <form class="space-y-4 md:space-y-6" action="#" @keyup.enter="login">
             <div>
               <Inputa label="" type="text" placeholder="Username" v-model="username" />
             </div>
