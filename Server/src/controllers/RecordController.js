@@ -210,7 +210,7 @@ exports.Export = async function (req, res) {
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'Data');
             // Generate a temporary file path
-            const tempFilePath = '../temp.xlsx';
+            const tempFilePath = '/tmp/temp.xlsx';
 
             // Write the XLSX file to the temp path
             XLSX.writeFile(wb, tempFilePath);
