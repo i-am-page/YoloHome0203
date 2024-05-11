@@ -14,7 +14,7 @@ route(app)
 
 
 const PORT = 8080;
-const HOST = '192.168.0.105'
+const HOST = '192.168.2.22'
 
 app.listen(PORT, HOST, () => {
     console.log(`Running on http://${HOST}:${PORT}`);

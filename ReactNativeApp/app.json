@@ -1,11 +1,20 @@
 {
   "expo": {
     "name": "my-app",
-    "slug": "my-app",
+    "slug": "currass2project",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/reload.gif",
     "userInterfaceStyle": "light",
+    "plugins": [
+      [
+        "@react-native-voice/voice",
+        {
+          "microphonePermission": "CUSTOM: Allow $(PRODUCT_NAME) to access the microphone",
+          "speechRecognitionPermission": "CUSTOM: Allow $(PRODUCT_NAME) to securely recognize user speech"
+        }
+      ]
+    ],
     "splash": {
       "image": "./assets/images/reload.gif",
       "resizeMode": "contain",
@@ -15,16 +24,29 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSSpeechRecognitionUsageDescription": "This app uses speech recognition to convert your speech to text.",
+        "NSCameraUsageDescription": "This app uses the camera to let user put a photo in his profile page."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/reload.gif",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/reload.gif"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8ac6dc3d-73c9-4631-8ea5-b901fc8ff1fb"
+      }
+    },
+    "owner": "khanhhcmut"
   }
 }

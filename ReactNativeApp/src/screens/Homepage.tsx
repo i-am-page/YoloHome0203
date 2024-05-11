@@ -12,21 +12,39 @@ import { apiFacade } from "./apiFacade";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
 import { Notifications } from "react-native-notifications";
+import Voice from "@react-native-voice/voice";
+
 type RootStackParamList = {
   Dashboard: undefined;
   SignIn: undefined;
   Graphs: undefined;
   // Add other screens here
 };
+type State = {
+  recognized: string;
+  pitch: string;
+  error: string;
+  end: string;
+  started: boolean;
+  results: string[];
+  partialResults: string[];
+};
+type Props = {
+  onSpeechStart: () => void;
+  onSpeechEnd: (result: any[]) => void;
+};
 type NavigationProp = StackNavigationProp<RootStackParamList, "Dashboard">;
-export const Homepage = (account: any) => {
+export const Homepage = (account: any, props: Props, state: State) => {
   const navigation = useNavigation<NavigationProp>();
   const [data, setData] = useState(null);
+  const [muted, setMuted] = useState(true);
+  const [result, setResult] = useState('');
+  const [isLoading, setLoading] = useState(false);
   // const nickname = account.route.params.nickname;
   const refresh = async () => {
     try {
       const data = await apiFacade.getRecord();
-      // console.log(data);
+      // console.log(data); 
       setData(data);
     } catch (error) {
       console.error(error);
@@ -35,9 +53,14 @@ export const Homepage = (account: any) => {
   useEffect(() => {
     refresh();
     const intervalId = setInterval(refresh, 60000);
+    Voice.onSpeechStart = speechStartHandler;
+    Voice.onSpeechEnd = speechEndHandler;
+    Voice.onSpeechResults = speechResultsHandler;
+    console.log(Voice._listeners)
     // Clear the interval when the component unmounts
     return () => {
       clearInterval(intervalId);
+      Voice.destroy().then(Voice.removeAllListeners); 
     };
   }, []);
   const switchLight = async (val: any) => {
@@ -106,6 +129,54 @@ export const Homepage = (account: any) => {
       }
     }
   }
+
+  //Voice Handler
+  const speechStartHandler = e => {
+    console.log('speechStart successful', e);
+  };
+  
+  const speechEndHandler = e => {
+    setLoading(false);
+    console.log('stop handler', e);
+  };
+  
+  const speechResultsHandler = e => {
+    const text = e.value[0];
+    setResult(text);
+  };
+
+  const handlePressIn = async () => {
+    setMuted(!muted);
+    setLoading(true);
+    if (Voice) {
+      try {
+        await Voice.start('en-Us');
+      } catch (error) {
+        console.log('error', error);
+      }
+    } else {
+      console.log("Errored")
+    }
+  };
+
+  const handlePressOut = async () => {
+    setMuted(true);
+    if (Voice) {
+      try {
+        await Voice.stop();
+        setLoading(false);
+      } catch (error) {
+        console.log('error', error);
+      }
+    } else {
+      console.log("Muting Error")
+    }
+  };
+
+  const clear = () => {
+    setResult('');
+  };
+
   return (
     <View style={styles.container}>
       <View style={[styles.row, { marginTop: 20, paddingVertical: 10 }]}>
@@ -321,6 +392,22 @@ export const Homepage = (account: any) => {
         >
           <Text style={{fontWeight:'bold', fontStyle:'italic'}}>DBoard</Text>
         </TouchableOpacity>
+        {muted &&
+        <TouchableOpacity onPress={() => handlePressIn()}>
+          <Image
+              source={require("../../assets/images/MicMute.png")}
+              style={[{ marginLeft: 0, width: 50, height: 50 }]}
+            />
+        </TouchableOpacity>
+        }
+        {!muted && 
+        <TouchableOpacity onPress={() => handlePressOut()}>
+          <Image
+              source={require("../../assets/images/Mic.png")}
+              style={[{ marginLeft: 0, width: 50, height: 50 }]}
+            />
+        </TouchableOpacity>
+        }
         <TouchableOpacity
           style={{
             backgroundColor: "#6effa0",
