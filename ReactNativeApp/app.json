@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "my-app",
-    "slug": "currass2project",
+    "slug": "my-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/reload.gif",
@@ -40,13 +40,12 @@
       ]
     },
     "web": {
-      "favicon": "./assets/reload.gif"
+      "favicon": "./assets/images/reload.gif"
     },
     "extra": {
       "eas": {
         "projectId": "8ac6dc3d-73c9-4631-8ea5-b901fc8ff1fb"
       }
-    },
-    "owner": "khanhhcmut"
+    }
   }
 }
