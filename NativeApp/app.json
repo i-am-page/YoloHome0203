@@ -1,0 +1,7 @@
+{
+  "name": "NativeAPp",
+  "displayName": "NativeAPp",
+  "android": {
+    "package": "DADN.HK232"
+  }
+}
