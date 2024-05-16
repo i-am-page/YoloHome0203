@@ -14,10 +14,10 @@ export default function App() {
 return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SignIn">
-        <Stack.Screen name="Dashboard" component={Homepage} />
         <Stack.Screen name="SignIn" component={Login} />
         <Stack.Screen name="Graphs" component={Chart} />
         <Stack.Screen name="SignUp" component={Signup} />
+        <Stack.Screen name="Dashboard" component={Homepage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

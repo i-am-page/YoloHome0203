@@ -61,6 +61,7 @@ export const Homepage = (account: any, props: Props, state: State) => {
     return () => {
       clearInterval(intervalId);
       Voice.destroy().then(Voice.removeAllListeners); 
+      console.log(result)
     };
   }, []);
   const switchLight = async (val: any) => {
@@ -143,6 +144,7 @@ export const Homepage = (account: any, props: Props, state: State) => {
   const speechResultsHandler = e => {
     const text = e.value[0];
     setResult(text);
+    console.log(result);
   };
 
   const handlePressIn = async () => {
