@@ -2,5 +2,5 @@ npm install
 npm start
 scan use expo app in mobile
 
-# BUGS:
-- NEEDS TO BE TURNED INTO PREBUILD VER TO CONTINUE BUILDING SPEECH-TO-TEXT MODULE
+# NOTICE:
+> This folder is now deprecated, due to outdated modules. Please revert to ./NativeApp to use MobileApp
