@@ -50,20 +50,7 @@ export const Homepage = (account: any, props: Props, state: State) => {
       console.error(error);
     }
   };
-  useEffect(() => {
-    refresh();
-    const intervalId = setInterval(refresh, 60000);
-    Voice.onSpeechStart = speechStartHandler;
-    Voice.onSpeechEnd = speechEndHandler;
-    Voice.onSpeechResults = speechResultsHandler;
-    console.log(Voice._listeners)
-    // Clear the interval when the component unmounts
-    return () => {
-      clearInterval(intervalId);
-      Voice.destroy().then(Voice.removeAllListeners); 
-      console.log(result)
-    };
-  }, []);
+
   const switchLight = async (val: any) => {
     const res = await apiFacade.switchLight(val);
     setData(res);
@@ -72,6 +59,21 @@ export const Homepage = (account: any, props: Props, state: State) => {
     const res = await apiFacade.switchFan(val);
     setData(res);
   };
+
+  useEffect(() => {
+    refresh();
+    const intervalId = setInterval(refresh, 60000);
+    Voice.onSpeechStart = speechStartHandler;
+    Voice.onSpeechEnd = speechEndHandler;
+    Voice.onSpeechResults = speechResultsHandler;
+    // Clear the interval when the component unmounts
+    return () => {
+      clearInterval(intervalId);
+      Voice.destroy().then(Voice.removeAllListeners); 
+      console.log("Result: ", result)
+    };
+  }, []);
+  
   const dateTime = new Date((data as any)?.time);
   var date = ``;
   if ((dateTime.getMonth()+1)>10) {
@@ -133,18 +135,31 @@ export const Homepage = (account: any, props: Props, state: State) => {
 
   //Voice Handler
   const speechStartHandler = e => {
-    console.log('speechStart successful', e);
+    console.log('speechStart successful', "\nError:",e);
   };
   
   const speechEndHandler = e => {
     setLoading(false);
-    console.log('stop handler', e);
+    console.log('stop handler', "\nError:", e);
   };
   
-  const speechResultsHandler = e => {
+  const speechResultsHandler = async(e) => {
     const text = e.value[0];
-    setResult(text);
-    console.log(result);
+    setResult(text)
+    if (e.value[0] == "turn on the light") {
+      switchLight(1);
+      refresh();
+    } else if (e.value[0] == "turn off the light") {
+      switchLight(0);
+      refresh();
+    } else if (e.value[0] == "turn on the fan") {
+      switchFan(100);
+      refresh();
+    } else if (e.value[0] == "turn off the fan") {
+      switchFan(0);
+      refresh();
+    }
+    console.log(e.value[0])
   };
 
   const handlePressIn = async () => {
@@ -154,10 +169,10 @@ export const Homepage = (account: any, props: Props, state: State) => {
       try {
         await Voice.start('en-Us');
       } catch (error) {
-        console.log('error', error);
+        console.log("Error:", error);
       }
     } else {
-      console.log("Errored")
+      console.log("Cannot Unmute")
     }
   };
 
@@ -168,7 +183,7 @@ export const Homepage = (account: any, props: Props, state: State) => {
         await Voice.stop();
         setLoading(false);
       } catch (error) {
-        console.log('error', error);
+        console.log('Error: ', error);
       }
     } else {
       console.log("Muting Error")
