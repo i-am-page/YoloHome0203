@@ -199,15 +199,17 @@ export default {
             }
 
         },
-        async switchLight() {
-            const val = this.Data.light == 0 ? 1 : 0;
-            this.Data.light = val;
-            console.log(val);
-            const res = await axios.post("/record/store", {
-                light: val
+        async switchLight(value) {
+            if (value === this.Data.light) {
+                alert("Light is already " + (value == 0 ? "off" : "on"));
+            }else{
+                this.Data.light = value;
+            await axios.post("/record/store", {
+                light: value
             });
+            }
         },
-        async switchFan() {
+        async switchFan(value) {
             const val = this.Data.fan == 0 ? 100 : 0;
             this.Data.fan = val;
             console.log(val);
@@ -218,7 +220,7 @@ export default {
         startSpeechRecognition() {
             this.isListening = true;
             const recognition = new window.webkitSpeechRecognition() || new window.SpeechRecognition();
-            recognition.lang = 'en-US';
+            recognition.lang = 'vi-VN';
             recognition.onresult = (event) => {
                 console.log("working")
                 this.recognizedText = event.results[0][0].transcript;
@@ -226,11 +228,11 @@ export default {
                 // Processing logic moved inside onresult event handler
                 const enspeech = this.recognizedText.split(" ");
                 console.log(enspeech);
-                if (enspeech[0] == "turn") {
+                if (enspeech[0] == "bật") {
                     console.log("turn");
                     if (enspeech[1] == "on") {
                         console.log("on");
-                        if (enspeech[3] == "light") {
+                        if (enspeech[3] == "đèn") {
                             console.log("light");
                             this.switchLight();
                         } else if (enspeech[3] == "fan") {
