@@ -63,7 +63,7 @@ import Navigation from "../components/Navigation.vue";
 
                                 <div class="flex flex-1 flex-col gap-5">
                                     <div class="flex-1 flex justify-center">
-                                        <button @click="switchFan"
+                                        <button @click="switchFan(isFanZero ? 100 : 0)"
                                             :class="{ 'bg-blue-100': isFanZero, 'bg-blue-400': isFanOne }" class="justify-center justify-center items-center hover:bg-blue-200
                                             text-blue font-bold rounded px-10 py-10 shadow-md flex flex-col gap-5">
                                             <label class="font-semibold text-xl text-center text-">Fan</label>
@@ -80,7 +80,7 @@ import Navigation from "../components/Navigation.vue";
 
                                 <div class="flex flex-1 flex-col gap-5">
                                     <div class="flex-1 flex justify-center">
-                                        <button @click="switchLight"
+                                        <button @click="switchLight(isLightZero ? 1 : 0)"
                                             :class="{ 'bg-red-100': isLightZero, 'bg-red-400': isLightOne }"
                                             class="hover:bg-red-200
                                             text-blue font-bold rounded px-10 py-10 shadow-md justify-center items-center flex flex-col gap-5">
@@ -199,26 +199,33 @@ export default {
             }
 
         },
-        async switchLight() {
-            const val = this.Data.light == 0 ? 1 : 0;
-            this.Data.light = val;
-            console.log(val);
+        async switchLight(value) {
+            if (value == this.Data.light)
+                alert("Light is already " + (value == 0 ? "off" : "on"));
+            else {
+            this.Data.light = value;
+            alert("Light is turned " + (value == 0 ? "off" : "on"));
             const res = await axios.post("/record/store", {
-                light: val
+                light: value
             });
+            }
         },
-        async switchFan() {
-            const val = this.Data.fan == 0 ? 100 : 0;
-            this.Data.fan = val;
-            console.log(val);
+        async switchFan(value) {
+            if (value == this.Data.fan)
+                alert("Fan is already " + (value == 0 ? "off" : "on"));
+            else {
+            this.Data.fan = value;
+            alert("Fan is turned " + (value == 0 ? "off" : "on"));
             const res = await axios.post("/record/store", {
-                fan: val
+                fan: value
             });
+            }
         },
         startSpeechRecognition() {
             this.isListening = true;
             const recognition = new window.webkitSpeechRecognition() || new window.SpeechRecognition();
             recognition.lang = 'en-US';
+            console.log(recognition.lang);
             recognition.onresult = (event) => {
                 console.log("working")
                 this.recognizedText = event.results[0][0].transcript;
@@ -232,19 +239,19 @@ export default {
                         console.log("on");
                         if (enspeech[3] == "light") {
                             console.log("light");
-                            this.switchLight();
+                            this.switchLight(1);
                         } else if (enspeech[3] == "fan") {
                             console.log("fan");
-                            this.switchFan();
+                            this.switchFan(100);
                         }
                     } else if (enspeech[1] == "off") {
                         console.log("off");
                         if (enspeech[3] == "light") {
                             console.log("light");
-                            this.switchLight();
+                            this.switchLight(0);
                         } else if (enspeech[3] == "fan") {
                             console.log("fan");
-                            this.switchFan();
+                            this.switchFan(0);
                         }
                     }
                 }
