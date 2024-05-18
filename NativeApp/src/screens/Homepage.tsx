@@ -70,7 +70,6 @@ export const Homepage = (account: any, props: Props, state: State) => {
     return () => {
       clearInterval(intervalId);
       Voice.destroy().then(Voice.removeAllListeners); 
-      console.log("Result: ", result)
     };
   }, []);
   
@@ -159,7 +158,7 @@ export const Homepage = (account: any, props: Props, state: State) => {
       switchFan(0);
       refresh();
     }
-    console.log(e.value[0])
+    console.log("Result Speech: ",e.value[0])
   };
 
   const handlePressIn = async () => {
