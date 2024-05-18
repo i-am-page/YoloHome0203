@@ -41,12 +41,22 @@ export const Homepage = (account: any) => {
     };
   }, []);
   const switchLight = async (val: any) => {
+    let newState= JSON.parse(JSON.stringify(data));
+    newState.light = val;
+  
+    // Set the state with the new object
+    setData(newState);
     const res = await apiFacade.switchLight(val);
-    setData(res);
+    //setData(res);
   };
   const switchFan = async (val: any) => {
+    let newState= JSON.parse(JSON.stringify(data));
+    newState.fan = val;
+  
+    // Set the state with the new object
+    setData(newState);
     const res = await apiFacade.switchFan(val);
-    setData(res);
+    //setData(res);
   };
   const dateTime = new Date((data as any)?.time);
   var date = ``;
