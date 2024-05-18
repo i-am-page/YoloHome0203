@@ -21,7 +21,7 @@
                         <!-- Menu Item Dashboard -->
                         <li>
                             <a class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out"
-                                href="/dashboard">
+                                @click="changetodb">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
@@ -44,7 +44,7 @@
                         <!-- Menu Item Auth Pages -->
                         <li>
                             <a class="group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out"
-                                href="/statistics">
+                                @click="changetostatistics">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
@@ -92,6 +92,12 @@ export default {
         async logout() {
             const res = await axios.get("/logout");
             this.$router.push("/login");
+        },
+        changetodb() {
+            this.$router.push("/dashboard");
+        },
+        changetostatistics() {
+            this.$router.push("/statistics");
         },
     },
 };

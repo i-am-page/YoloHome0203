@@ -178,9 +178,9 @@ export default {
             {
                 alert("You need to turn on the fan");
             }
-            if (this.Data.humidity > 50)
+            if (this.Data.humidity > 60)
             {
-                alert("Humidity is above 50%");
+                alert("Humidity is above 60%");
             }
             if (this.Data.lightvalue > 75)
             {

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Button,
 } from "react-native";
+//import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { apiFacade } from "./apiFacade";
@@ -63,6 +64,17 @@ export const Homepage = (account: any, props: Props, state: State) => {
       Voice.destroy().then(Voice.removeAllListeners); 
     };
   }, []);
+  // const startListening = () => {
+  //   SpeechRecognition.startListening({ continuous: true });
+  // };
+
+  // const stopListening = () => {
+  //   SpeechRecognition.stopListening();
+  // };
+
+  // const refresh = async () => {
+  //   // your existing code...
+  // };
   const switchLight = async (val: any) => {
     const res = await apiFacade.switchLight(val);
     setData(res);
@@ -424,6 +436,13 @@ export const Homepage = (account: any, props: Props, state: State) => {
           <Text style={{fontStyle:'italic'}}>Graphs</Text>
         </TouchableOpacity>
       </View>
+      <View>
+      <Button onPress={startListening} title="Start Listening" />
+      <Button onPress={stopListening} title="Stop Listening" />
+      <Button onPress={resetTranscript} title="Reset" />
+      <Text>{transcript}</Text>
+      {/* your existing components... */}
+    </View>
     </View>
   );
 };

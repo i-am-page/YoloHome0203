@@ -1,4 +1,4 @@
-//require('dotenv').config()
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const route = require('./src/routes')
@@ -13,10 +13,9 @@ app.use(express.urlencoded({ extended: true }))
 route(app)
 
 
-const PORT = 8080;
+const PORT = process.env.PORT//8080;
 // const HOST = '192.168.2.21'
-const HOST = '192.168.0.105'
 
-app.listen(PORT, HOST, () => {
-    console.log(`Running on http://${HOST}:${PORT}`);
+app.listen(PORT, () => {
+    console.log(`Running on http://localhost:${PORT}`);
 });

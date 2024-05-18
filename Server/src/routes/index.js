@@ -6,5 +6,9 @@ const route = (app) => {
     app.use('/account', accountRouter)
     app.get('/statistics', RecordController.Statistics)
     app.get('/export', RecordController.Export)  
+    app.get('/', (req, res) => {
+        res.send('Hello World!')
+    }
+    )
 }
 module.exports = route
