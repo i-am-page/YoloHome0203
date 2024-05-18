@@ -1,0 +1,14 @@
+{
+  "name": "NativeAPp",
+  "displayName": "NativeAPp",
+  "android": {
+    "package": "DADN.HK232",
+    "permissions": [
+      "android.permission.RECORD_AUDIO"
+    ]
+  },
+  "expo": {
+    "name": "NativeAPp",
+    "slug": "NativeAPp"
+  }
+}
