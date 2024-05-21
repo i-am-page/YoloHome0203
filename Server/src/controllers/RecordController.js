@@ -200,9 +200,8 @@ exports.Export = async function (req, res) {
 
                 return averages;
             };
-
             const avgdatas = avgdata(); 
-            
+            console.log(avgdatas);
 
             // Create a worksheet from your data
             const ws = XLSX.utils.json_to_sheet(Object.values(avgdatas));
