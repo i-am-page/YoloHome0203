@@ -12,21 +12,21 @@ import Navigation from "../components/Navigation.vue";
       <main class="flex bg-mycolor flex-col flex-1 p-8 bg-gray-50">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div class="p-6 bg-white shadow rounded-lg my-bg">
-            <label class="font-semibold text-lg text-center mb-4 text-white block">Temperature (°C)</label>
+            <label class="font-semibold text-lg text-center mb-4 text-white font-mono block">Temperature (°C)</label>
             <div class="gauge-container">
               <gauge :value="Data ? Data.temp : 0" :threshold="35" :min="0" :max="50" :decimals="0" :type="temperature">
               </gauge>
             </div>
           </div>
           <div class="p-6 bg-white shadow my-bg rounded-lg">
-            <label class="font-semibold text-lg text-white text-center mb-4 block">Humidity (%)</label>
+            <label class="font-semibold text-lg text-white text-center mb-4 font-mono block">Humidity (%)</label>
             <div class="gauge-container">
-              <gauge :value="Data ? Data.humidity : 0" :threshold="60" :min="0" :max="100" :decimals="0"
+              <gauge :value="Data ? Data.humidity : 0" :threshold="65" :min="0" :max="100" :decimals="0"
                 :type="humidity"></gauge>
             </div>
           </div>
           <div class="p-6 bg-white shadow my-bg rounded-lg">
-            <label class="font-semibold text-lg text-white text-center mb-4 block">Luminosity (lx)</label>
+            <label class="font-semibold text-lg text-white text-center mb-4 font-mono block">Luminosity (%)</label>
             <div class="gauge-container">
               <gauge :value="Data ? Data.lightvalue : 0" :threshold="75" :min="0" :max="100" :decimals="0"
                 :type="luminosity"></gauge>
@@ -36,7 +36,7 @@ import Navigation from "../components/Navigation.vue";
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
           <button @click="switchFan(isFanZero ? 100 : 0)"
             :class="[isFanZero ? 'bg-blue-100' : 'gradient1', 'flex flex-col items-center justify-center p-6 shadow rounded-lg transition-colors']">
-            <label class="font-semibold text-lg">Fan</label>
+            <label class="font-semibold text-lg font-mono">Fan</label>
             <div class="icon-container rounded-full p-4">
               <svg v-if="isFanZero" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                 stroke="currentColor" class="w-8 h-8">
@@ -50,7 +50,7 @@ import Navigation from "../components/Navigation.vue";
           </button>
           <button @click="switchLight(isLightZero ? 1 : 0)"
             :class="[isLightZero ? 'bg-red-100' : 'gradient2', 'flex flex-col items-center justify-center p-6 shadow rounded-lg transition-colors']">
-            <label class="font-semibold text-lg">Light</label>
+            <label class="font-semibold text-lg font-mono">Light</label>
             <div class="icon-container rounded-full p-4">
               <svg v-if="isLightZero" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                 stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
@@ -66,7 +66,7 @@ import Navigation from "../components/Navigation.vue";
           </button>
           <button @click="startSpeechRecognition"
             :class="[isListening ? 'gradient3 text-white' : 'bg-yellow-100', 'flex flex-col items-center justify-center p-6 shadow rounded-lg transition-colors']">
-            <label class="font-semibold text-lg">Assistant</label>
+            <label class="font-semibold text-lg font-mono">Assistant</label>
             <div class="icon-container rounded-full p-4">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-8 h-8">
@@ -124,11 +124,11 @@ export default {
       if (this.Data.temp > 35) {
         alert("You need to turn on the fan");
       }
-      if (this.Data.humidity > 60) {
-        alert("Humidity is above 60%");
+      if (this.Data.humidity > 65) {
+        alert("Humidity is above 65%");
       }
       if (this.Data.lightvalue > 75) {
-        alert("Luminosity is above 75");
+        alert("Luminosity is above 75%");
       }
     },
     async getData() {
@@ -146,10 +146,11 @@ export default {
         alert("Light is already " + (value == 0 ? "off" : "on"));
       else {
         this.Data.light = value;
-        alert("Light is turned " + (value == 0 ? "off" : "on"));
         await axios.post("/record/store", {
           light: value,
         });
+        alert("Light is turned " + (value == 0 ? "off" : "on"));
+        
       }
     },
     async switchFan(value) {
@@ -157,10 +158,11 @@ export default {
         alert("Fan is already " + (value == 0 ? "off" : "on"));
       else {
         this.Data.fan = value;
-        alert("Fan is turned " + (value == 0 ? "off" : "on"));
         await axios.post("/record/store", {
           fan: value,
         });
+        alert("Fan is turned " + (value == 0 ? "off" : "on"));
+        
       }
     },
     startSpeechRecognition() {

@@ -59,8 +59,8 @@
                 <div class="relative">
                     <a class="flex items-center gap-4" href="#">
                         <span class="hidden text-right lg:block">
-                            <span class="block text-sm font-medium text-white ">SAIGON-SOFTWARE</span>
-                            <span class="block text-xs font-medium text-white ">DADN-YoloHome0203</span>
+                            <span class="block text-sm font-medium text-white font-mono ">SAIGON-SOFTWARE</span>
+                            <span class="block text-xs font-medium text-white font-mono ">DADN-YoloHome0203</span>
                         </span>
 
                         <span class="h-12 w-12 overflow-hidden rounded-full">

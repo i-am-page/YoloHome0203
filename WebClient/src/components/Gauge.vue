@@ -1,8 +1,8 @@
 <template>
-  <div class="gauge-container">
+  <div class="gauge-container font-mono">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100"
-      preserveAspectRatio="xMidYMid" class="gauge ">
-      <text :x="centerX" :y="centerY" class="value">
+      preserveAspectRatio="xMidYMid" class="gauge font-mono ">
+      <text :x="centerX" :y="centerY" class="value font-mono">
         {{ tweenedValue.toFixed(decimals) }}
       </text>
       <path class="arc below-needle" :d="belowNeedlePathData"></path>
@@ -233,7 +233,6 @@ $arc-gap-exceeding: #ff5733;
       fill: $value-color;
       font-size: 1rem;
       text-anchor: middle;
-      font-family: 'Arial', sans-serif;
       dominant-baseline: middle;
     }
 

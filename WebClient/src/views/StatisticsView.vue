@@ -14,27 +14,29 @@ import Navigation from "../components/Navigation.vue";
                 <Header />
             </div>
             <main class="flex-1 h-full">
-                <div class="h-full mx-auto p-6 md:p-8 2xl:p-12">
-                    <div class="h-full container flex flex-col gap-8 bg-gray-50">
+                <div class="h-full mx-auto p-6 md:p-8 2xl:p-12 bg-gray-50 my-bg">
+                    <div class="h-full container flex flex-col gap-8 bg-gray-50 rounded-lg">
                         <form @submit.prevent="exportExcel"
-                            class="flex flex-col sm:flex-row justify-between items-center p-4 bg-white shadow-lg rounded-md">
+                            class="flex flex-col sm:flex-row justify-between items-center p-4 bg-white shadow-lg rounded-lg">
                             <div class="flex flex-col sm:flex-row items-center gap-4 mb-4 sm:mb-0">
-                                <label for="start-date" class="font-bold text-gray-700">Start Date</label>
+                                <label for="start-date" class="font-bold font-mono text-gray-700">Start Date</label>
                                 <div class="flex items-center gap-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="#0175F8" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M8 7V3H6v4H3v2h18V7h-3V3h-2v4H8zM3 21v-2h18v2H3zm0-4v-2h18v2H3zm0-4v-2h18v2H3zm0-4v-2h18v2H3z" />
                                     </svg>
                                     <input type="date" id="start-date"
                                         class="border border-gray-300 py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
                                 </div>
                             </div>
                             <div class="flex flex-col sm:flex-row items-center gap-4 mb-4 sm:mb-0">
-                                <label for="end-date" class="font-bold text-gray-700">End Date</label>
+                                <label for="end-date" class="font-bold font-mono text-gray-700">End Date</label>
                                 <div class="flex items-center gap-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="#0175F8" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M8 7V3H6v4H3v2h18V7h-3V3h-2v4H8zM3 21v-2h18v2H3zm0-4v-2h18v2H3zm0-4v-2h18v2H3zm0-4v-2h18v2H3z" />
                                     </svg>
                                     <input type="date" id="end-date"
                                         class="border border-gray-300 py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
@@ -43,12 +45,16 @@ import Navigation from "../components/Navigation.vue";
                             <div
                                 class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded-md transition-colors duration-200">
                                 <button type="submit"
-                                    class="focus:outline-none flex items-center justify-center h-10 w-32">
-                                    Export Excel
+                                    class="focus:outline-none flex items-center font-mono justify-center h-10 w-32">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                    Export
                                 </button>
                             </div>
                         </form>
-                        <div class=" flex flex-col justify-center items-center">
+                        <div class="flex flex-col justify-center items-center">
                             <div class="arrow-container flex items-center">
                                 <i class="fas fa-arrow-left text-gray-600 hover:text-gray-800 cursor-pointer mx-4"
                                     @click="prevChart"></i>
@@ -85,7 +91,8 @@ import {
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    Filler,
 } from 'chart.js';
 
 ChartJS.register(
@@ -95,7 +102,8 @@ ChartJS.register(
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend, Title,
+    Filler,
 );
 
 export default {
@@ -179,18 +187,19 @@ export default {
                     datasets: [
                         {
                             label: 'Temperature',
-                            backgroundColor: 'rgba(248, 121, 121, 0.2)',
                             data: res.data.map(row => row.temp),
-                            pointRadius: 5,
-                            pointBackgroundColor: '#f87979',
-                            pointBorderColor: '#f87979',
-                            tension: 0.3,
-                            borderColor: '#f87979',
+                            backgroundColor: 'rgba(248, 121, 121, 0.2)',
                             fill: true,
-                            borderWidth: 2
+                            borderColor: '#f87979',
+                            borderWidth: 2,
+                            pointRadius: 5,
+                            pointBackgroundColor: 'red',
+                            pointBorderColor: '#f87979',
+                            tension: 0.3
                         }
                     ]
                 };
+
                 this.chartData_humid = {
                     labels: res.data.map(row => moment(row.time).utcOffset(0).format("h:mm:ss a")),
                     datasets: [
@@ -203,9 +212,11 @@ export default {
                             pointBorderColor: '#00BFFF',
                             tension: 0.3,
                             borderColor: '#00BFFF',
-                            borderWidth: 2
+                            borderWidth: 2,
+                            fill: true
                         }
-                    ]
+                    ],
+
                 };
                 this.chartData_lumin = {
                     labels: res.data.map(row => moment(row.time).utcOffset(0).format("h:mm:ss a")),
@@ -219,7 +230,8 @@ export default {
                             pointBorderColor: '#32CD32',
                             tension: 0.3,
                             borderColor: '#32CD32',
-                            borderWidth: 2
+                            borderWidth: 2,
+                            fill: true
                         }
                     ]
                 };

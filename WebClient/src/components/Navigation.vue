@@ -12,13 +12,13 @@
             <nav class="h-80 mt-5 py-4 px-4 lg:mt-9 lg:px-6" x-data="{selected: $persist('Dashboard')}">
                 <!-- Menu Group -->
                 <div>
-                    <h3 class="mb-4 ml-4 text-sm font-medium text-white">
+                    <h3 class="mb-4 ml-4 text-sm font-medium text-white font-mono">
                         MENU
                     </h3>
                     <ul class="mb-6 flex flex-col gap-1.5">
                         <!-- Menu Item Dashboard -->
                         <li>
-                            <a class="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-white transition duration-300 ease-in-out hover:bg-blue-100 dark:hover:bg-gray-700"
+                            <a class="group font-mono relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-white transition duration-300 ease-in-out hover:bg-blue-100 dark:hover:bg-gray-700"
                                 @click="changetodb">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -35,7 +35,7 @@
 
                         <!-- Menu Item Statistics -->
                         <li>
-                            <a class="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-white transition duration-300 ease-in-out hover:bg-blue-100 dark:hover:bg-gray-700"
+                            <a class="group font-mono relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-white transition duration-300 ease-in-out hover:bg-blue-100 dark:hover:bg-gray-700"
                                 @click="changetostatistics">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -54,7 +54,7 @@
                     <ul class="absolute bottom-0 w-full mb-6 flex flex-col gap-1.5">
                         <!-- Menu Item Logout -->
                         <li>
-                            <a class="group relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-white transition duration-300 ease-in-out hover:bg-blue-100 dark:hover:bg-gray-700"
+                            <a class="group font-mono relative flex items-center gap-2.5 rounded-lg py-2 px-4 font-medium text-white transition duration-300 ease-in-out hover:bg-blue-100 dark:hover:bg-gray-700"
                                 @click="logout">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
