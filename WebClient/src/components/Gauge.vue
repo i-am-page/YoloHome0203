@@ -9,6 +9,7 @@
       <path class="arc gap" :class="{ exceeding: exceeding }" :d="gapPathData"></path>
       <path v-if="threshold" class="arc above-threshold" :d="aboveThresholdPathData"></path>
     </svg>
+    <button v-if="custom" @click="goToDetailPage(type)" class="detail-button">Detail</button>
   </div>
 </template>
 
@@ -17,6 +18,16 @@ import gsap from 'gsap'
 
 export default {
   props: {
+    attr: {
+      type: String,
+      required: false,
+      default: "" 
+    },
+    custom:{
+      type: String,
+      required: false,
+      default: true
+    },
     value: {
       type: Number,
       required: false,
@@ -42,17 +53,12 @@ export default {
       required: false,
       default: 0
     },
-    type: {
-      type: String,
-      required: false,
-      default: 'temperature' // temperature, humidity, luminosity
-    }
+    
   },
 
   data() {
     return {
       tweenedValue: null,
-      type: 'temperature',
       realThreshold: null,
       centerX: 50,
       centerY: 50,
@@ -127,6 +133,9 @@ export default {
   },
 
   methods: {
+    goToDetailPage() {
+      this.$router.push({ path: '/details', query: { type: this.attr }});
+    },
     getCirclePoint(radius, angle) {
       let x = this.centerX + Math.cos((angle / 180) * Math.PI) * radius
       let y = this.centerY + Math.sin((angle / 180) * Math.PI) * radius
@@ -258,5 +267,19 @@ $arc-gap-exceeding: #ff5733;
 
 .my-bg {
   background-color: #27293B;
+}
+.detail-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.detail-button:hover {
+  background-color: #0056b3;
 }
 </style>

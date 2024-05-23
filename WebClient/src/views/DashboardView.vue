@@ -14,7 +14,7 @@ import Navigation from "../components/Navigation.vue";
           <div class="p-6 bg-white shadow rounded-lg my-bg">
             <label class="font-semibold text-lg text-center mb-4 text-white font-mono block">Temperature (°C)</label>
             <div class="gauge-container">
-              <gauge :value="Data ? Data.temp : 0" :threshold="35" :min="0" :max="50" :decimals="0" :type="temperature">
+              <gauge :value="Data ? Data.temp : 0" :threshold="35" :min="0" :max="50" :decimals="0" :attr="'temperature'">
               </gauge>
             </div>
           </div>
@@ -22,14 +22,14 @@ import Navigation from "../components/Navigation.vue";
             <label class="font-semibold text-lg text-white text-center mb-4 font-mono block">Humidity (%)</label>
             <div class="gauge-container">
               <gauge :value="Data ? Data.humidity : 0" :threshold="65" :min="0" :max="100" :decimals="0"
-                :type="humidity"></gauge>
+                :attr="'humidity'"></gauge>
             </div>
           </div>
           <div class="p-6 bg-white shadow my-bg rounded-lg">
             <label class="font-semibold text-lg text-white text-center mb-4 font-mono block">Luminosity (%)</label>
             <div class="gauge-container">
               <gauge :value="Data ? Data.lightvalue : 0" :threshold="75" :min="0" :max="100" :decimals="0"
-                :type="luminosity"></gauge>
+                :attr="'luminosity'"></gauge>
             </div>
           </div>
         </div>
@@ -76,6 +76,11 @@ import Navigation from "../components/Navigation.vue";
             </div>
           </button>
         </div>
+        <div class="fixed bottom-4 right-4 space-y-2">
+          <div v-for="(notification, index) in notifications" :key="index" class="bg-white p-4 rounded-lg shadow-lg">
+            <p class="text-sm font-mono">{{ notification.text }}</p>
+          </div>
+        </div>
       </main>
     </div>
   </div>
@@ -96,20 +101,19 @@ export default {
       enspeech: [],
       light: 1,
       fan: 1,
+      textnoti: "",
+      notifications: [],
     };
   },
   mounted() {
     this.getData();
     this.interval = setInterval(() => {
       this.getData();
-    }, 60000);
-    this.notifyInterval = setInterval(() => {
       this.notify();
-    }, 1000);
+    }, 60000);
   },
   beforeDestroy() {
     clearInterval(this.interval);
-    clearInterval(this.notifyInterval);
   },
   computed: {
     isLightZero() {
@@ -122,13 +126,21 @@ export default {
   methods: {
     notify() {
       if (this.Data.temp > 35) {
-        alert("You need to turn on the fan");
+        this.textnoti = "Temperature is above 35°C";
+        this.addNotification(this.textnoti)
+
       }
       if (this.Data.humidity > 65) {
-        alert("Humidity is above 65%");
+        this.textnoti = "Humidity is above 65%";
+        this.addNotification(this.textnoti)
       }
       if (this.Data.lightvalue > 75) {
-        alert("Luminosity is above 75%");
+        this.textnoti = "Luminosity is above 75%";
+        this.addNotification(this.textnoti)
+      }
+      if (this.Data.lightvalue < 25) {
+        this.textnoti = "Luminosity is below 25%";
+        this.addNotification(this.textnoti)
       }
     },
     async getData() {
@@ -141,6 +153,13 @@ export default {
         this.$router.push("/unauthorized");
       }
     },
+    addNotification(text) {
+      const notification = { text };
+      this.notifications.push(notification);
+      setTimeout(() => {
+        this.notifications = this.notifications.filter(n => n.id !== notification.id);
+      }, 5000);
+    },
     async switchLight(value) {
       if (value == this.Data.light)
         alert("Light is already " + (value == 0 ? "off" : "on"));
@@ -149,8 +168,8 @@ export default {
         await axios.post("/record/store", {
           light: value,
         });
-        alert("Light is turned " + (value == 0 ? "off" : "on"));
-        
+        this.textnoti = "Light is turned " + (value == 0 ? "off" : "on");
+        this.addNotification(this.textnoti);
       }
     },
     async switchFan(value) {
@@ -161,8 +180,8 @@ export default {
         await axios.post("/record/store", {
           fan: value,
         });
-        alert("Fan is turned " + (value == 0 ? "off" : "on"));
-        
+        this.textnoti = "Fan is turned " + (value == 0 ? "off" : "on");
+        this.addNotification(this.textnoti)
       }
     },
     startSpeechRecognition() {
@@ -172,20 +191,24 @@ export default {
       recognition.lang = "en-US";
       recognition.onresult = (event) => {
         this.recognizedText = event.results[0][0].transcript;
-        const enspeech = this.recognizedText.split(" ");
-        if (enspeech[0].toLowerCase() == "turn") {
-          if (enspeech[1] == "on") {
-            if (enspeech[3] == "light") {
-              this.switchLight(1);
-            } else if (enspeech[3] == "fan") {
-              this.switchFan(100);
-            }
-          } else if (enspeech[1] == "off") {
-            if (enspeech[3] == "light") {
-              this.switchLight(0);
-            } else if (enspeech[3] == "fan") {
-              this.switchFan(0);
-            }
+        const speech = this.recognizedText.toLowerCase();
+        if (speech.includes('on')) {
+          if (speech.includes('light')) {
+            this.switchLight(1);
+          } else if (speech.includes('fan')) {
+            this.switchFan(100);
+          } else if (speech.includes('everything')) {
+            this.switchLight(1);
+            this.switchFan(100);
+          }
+        } else if (speech.includes('off')) {
+          if (speech.includes('light')) {
+            this.switchLight(0);
+          } else if (speech.includes('fan')) {
+            this.switchFan(0);
+          } else if (speech.includes('everything')) {
+            this.switchLight(0);
+            this.switchFan(0);
           }
         }
       };
@@ -193,6 +216,8 @@ export default {
         this.isListening = false;
       };
       recognition.start();
+      this.textnoti = "Start listening..."
+      this.addNotification(this.textnoti)
     },
   },
 };
@@ -293,20 +318,24 @@ button:active {
 }
 
 .gradient1 {
-  background: linear-gradient(90deg, 
-  #6666ff, /* Medium Blue */
-  #9999ff, /* Medium Light Blue */
-);
+  background: linear-gradient(90deg,
+      #6666ff,
+      /* Medium Blue */
+      #9999ff,
+      /* Medium Light Blue */
+    );
 
   background-size: 1500% 1500%;
   animation: gradient1 3s ease infinite;
 }
 
 .gradient2 {
-  background: linear-gradient(270deg, 
-  #ff3333, /* Light Red */
-  #ff6666, /* Soft Red */
-);
+  background: linear-gradient(270deg,
+      #ff3333,
+      /* Light Red */
+      #ff6666,
+      /* Soft Red */
+    );
 
   background-size: 1500% 1500%;
   animation: gradient2 3s ease infinite;
