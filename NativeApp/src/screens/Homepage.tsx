@@ -54,10 +54,12 @@ export const Homepage = (account: any, props: Props, state: State) => {
   const switchLight = async (val: any) => {
     const res = await apiFacade.switchLight(val);
     setData(res);
+    refresh();
   };
   const switchFan = async (val: any) => {
     const res = await apiFacade.switchFan(val);
     setData(res);
+    refresh();
   };
 
   useEffect(() => {
@@ -156,6 +158,14 @@ export const Homepage = (account: any, props: Props, state: State) => {
       refresh();
     } else if (e.value[0] == "turn off the fan") {
       switchFan(0);
+      refresh();
+    } else if (e.value[0] == "turn on everything") {
+      switchFan(100);
+      switchLight(1);
+      refresh();
+    } else if (e.value[0] == "turn off everything") {
+      switchFan(0);
+      switchLight(0);
       refresh();
     }
     console.log("Result Speech: ",e.value[0])
