@@ -15,6 +15,7 @@ route(app)
 
 
 const PORT = process.env.PORT//8080;
+// const HOST = '192.168.2.21'
 
 app.listen(PORT, () => {
     console.log(`Running on http://localhost:${PORT}`);
