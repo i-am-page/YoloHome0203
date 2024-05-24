@@ -124,7 +124,7 @@ export default {
         this.interval = setInterval(() => {
             this.updateData();
             this.getData();
-        }, 60000);
+        }, 30000);
         this.currentChart = 'temp';
         console.log(this.chartData_temp);
     },
@@ -183,11 +183,11 @@ export default {
             try {
                 const res = await axios.get("/statistics");
                 this.chartData_temp = {
-                    labels: res.data.map(row => moment(row.time).utcOffset(0).format("h:mm:ss a")),
+                    labels: res.data.map(row => moment(row.time).utcOffset(0).format("h:mm:ss a")).reverse(),
                     datasets: [
                         {
                             label: 'Temperature',
-                            data: res.data.map(row => row.temp),
+                            data: res.data.map(row => row.temp).reverse(),
                             backgroundColor: 'rgba(248, 121, 121, 0.2)',
                             fill: true,
                             borderColor: '#f87979',
@@ -201,12 +201,12 @@ export default {
                 };
 
                 this.chartData_humid = {
-                    labels: res.data.map(row => moment(row.time).utcOffset(0).format("h:mm:ss a")),
+                    labels: res.data.map(row => moment(row.time).utcOffset(0).format("h:mm:ss a")).reverse(),
                     datasets: [
                         {
                             label: 'Humidity',
                             backgroundColor: 'rgba(0, 191, 255, 0.2)',
-                            data: res.data.map(row => row.humidity),
+                            data: res.data.map(row => row.humidity).reverse(),
                             pointRadius: 5,
                             pointBackgroundColor: '#00BFFF',
                             pointBorderColor: '#00BFFF',
@@ -219,12 +219,12 @@ export default {
 
                 };
                 this.chartData_lumin = {
-                    labels: res.data.map(row => moment(row.time).utcOffset(0).format("h:mm:ss a")),
+                    labels: res.data.map(row => moment(row.time).utcOffset(0).format("h:mm:ss a")).reverse(),
                     datasets: [
                         {
                             label: 'Luminosity',
                             backgroundColor: 'rgba(50, 205, 50, 0.2)',
-                            data: res.data.map(row => row.lightvalue),
+                            data: res.data.map(row => row.lightvalue).reverse(),
                             pointRadius: 5,
                             pointBackgroundColor: '#32CD32',
                             pointBorderColor: '#32CD32',

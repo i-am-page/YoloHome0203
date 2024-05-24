@@ -11,7 +11,7 @@ import Navigation from "../components/Navigation.vue";
             <Header />
             <main class="flex flex-col flex-1 p-8 bg-mycolor">
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
-                    <div class="p-6 bg-white shadow rounded-lg my-bg col-span-1">
+                    <div class="p-4 bg-white shadow rounded-lg my-bg col-span-1">
                         <label class="font-semibold text-lg text-center mb-4 text-white font-mono block">
                             {{ title }}
                         </label>
@@ -21,15 +21,16 @@ import Navigation from "../components/Navigation.vue";
                         </div>
                     </div>
                     <div class="p-6 bg-white shadow rounded-lg my-bg col-span-4">
-                        <div class="overflow-auto h-full">
+                        <div class="overflow-auto max-h-44">
                             <data-stream :dataStream="DataS"></data-stream>
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 p-4 shadow-lg rounded-lg h-72 ">
+                <div class="bg-gray-50 p-4 shadow-lg rounded-lg h-72">
                     <Line v-if="loaded" :data="chartData" :options="chartOptions" class="m-4" />
                 </div>
             </main>
+
         </div>
     </div>
 </template>
@@ -100,7 +101,7 @@ export default {
         this.interval = setInterval(() => {
             this.getData();
             this.getChartData();
-        }, 60000);
+        }, 30000);
     },
     beforeDestroy() {
         clearInterval(this.interval);
@@ -128,8 +129,8 @@ export default {
                 }
 
                 const ares = await axios.get("https://io.adafruit.com/api/v2/thanhdanh2754/feeds/" + this.stringtype + "/data/chart")
-                this.DataS = ares.data.data;
-
+                this.DataS = ares.data.data.map(row => [moment(row[0]).utcOffset(7).format("DD/MM/yyyy hh:mm:ss a"), row[1]]).reverse();
+                console.log(ares.data.data);
             } catch (error) {
                 this.$router.push("/unauthorized");
             }
@@ -140,19 +141,19 @@ export default {
                 const bres = await axios.get("/statistics");
 
                 if (this.stringtype === "tempx") {
-                    this.row = bres.data.map(row => row.temp);
+                    this.row = bres.data.map(row => row.temp).reverse();
                     this.bgcl = 'rgba(248, 121, 121, 0.2)';
                     this.bdcl = '#f87979';
                     this.pbgcl = 'red';
                     this.pbdcl = '#f87979';
                 } else if (this.stringtype === "humidx") {
-                    this.row = bres.data.map(row => row.humidity);
+                    this.row = bres.data.map(row => row.humidity).reverse();
                     this.bgcl = 'rgba(0, 191, 255, 0.2)';
                     this.bdcl = '#00BFFF';
                     this.pbgcl = '#00BFFF';
                     this.pbdcl = '#00BFFF';
                 } else if (this.stringtype === "lightx") {
-                    this.row = bres.data.map(row => row.lightvalue);
+                    this.row = bres.data.map(row => row.lightvalue).reverse();
                     this.bgcl = 'rgba(50, 205, 50, 0.2)';
                     this.bdcl = '#32CD32';
                     this.pbgcl = '#32CD32';
@@ -160,12 +161,12 @@ export default {
                 }
 
                 this.chartData = {
-                    labels: bres.data.map(row => moment(row.time).utcOffset(0).format("h:mm:ss a")),
+                    labels: bres.data.map(row => moment(row.time).utcOffset(0).format("h:mm:ss a")).reverse(),
                     datasets: [
                         {
                             label: this.title,
                             data: this.row,
-                            backgroundColor:this.bgcl,
+                            backgroundColor: this.bgcl,
                             fill: true,
                             borderColor: this.bdcl,
                             borderWidth: 2,

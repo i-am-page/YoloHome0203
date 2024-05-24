@@ -11,7 +11,7 @@ defineEmits(["update:modelValue"]);
         <div>
             <input :type="props.type" :placeholder="props.placeholder" :value="props.modelValue" :readonly="props.readOnly"
                 @input="$emit('update:modelValue', $event.target.value)"
-                class=" border block w-full p-2 text-sm rounded-lg focus:ring-blue-500 focus:border-e-500" />
+                class="font-mono border block w-full p-2 text-sm rounded-lg focus:ring-blue-500 focus:border-e-500" />
         </div>
     </div>
 </template>

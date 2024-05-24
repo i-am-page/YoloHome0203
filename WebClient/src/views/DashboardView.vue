@@ -110,7 +110,7 @@ export default {
     this.interval = setInterval(() => {
       this.getData();
       this.notify();
-    }, 60000);
+    }, 30000);
   },
   beforeDestroy() {
     clearInterval(this.interval);
