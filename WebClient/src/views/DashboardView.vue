@@ -143,73 +143,109 @@ export default {
         this.addNotification(this.textnoti)
       }
     },
-    async getData() {
-      try {
-        const res = await axios.get("/record", {
-          headers: { authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
-        this.Data = res.data;
-      } catch (error) {
-        this.$router.push("/unauthorized");
-      }
-    },
-    addNotification(text) {
-      const notification = { text };
-      this.notifications.push(notification);
-      setTimeout(() => {
-        this.notifications = this.notifications.filter(n => n.id !== notification.id);
-      }, 5000);
-    },
-    async switchLight(value) {
-      if (value == this.Data.light)
-        alert("Light is already " + (value == 0 ? "off" : "on"));
-      else {
-        this.Data.light = value;
-        await axios.post("/record/store", {
-          light: value,
-        });
-        this.textnoti = "Light is turned " + (value == 0 ? "off" : "on");
-        this.addNotification(this.textnoti);
-      }
-    },
-    async switchFan(value) {
-      if (value == this.Data.fan)
-        alert("Fan is already " + (value == 0 ? "off" : "on"));
-      else {
-        this.Data.fan = value;
-        await axios.post("/record/store", {
-          fan: value,
-        });
-        this.textnoti = "Fan is turned " + (value == 0 ? "off" : "on");
-        this.addNotification(this.textnoti)
-      }
-    },
-    startSpeechRecognition() {
-      this.isListening = true;
-      const recognition =
-        new window.webkitSpeechRecognition() || new window.SpeechRecognition();
-      recognition.lang = "en-US";
-      recognition.onresult = (event) => {
-        this.recognizedText = event.results[0][0].transcript;
-        const speech = this.recognizedText.toLowerCase();
-        if (speech.includes('on')) {
-          if (speech.includes('light')) {
-            this.switchLight(1);
-          } else if (speech.includes('fan')) {
-            this.switchFan(100);
-          } else if (speech.includes('everything')) {
-            this.switchLight(1);
-            this.switchFan(100);
-          }
-        } else if (speech.includes('off')) {
-          if (speech.includes('light')) {
-            this.switchLight(0);
-          } else if (speech.includes('fan')) {
-            this.switchFan(0);
-          } else if (speech.includes('everything')) {
-            this.switchLight(0);
-            this.switchFan(0);
-          }
+    computed: {
+        isLightZero() {
+            return this.Data ? this.Data.light == 0 : false;
+        },
+        isLightOne() {
+            return this.Data ? this.Data.light == 1 : false;
+        },
+        isFanZero() {
+            return this.Data ? this.Data.fan == 0 : false;
+        },
+        isFanOne() {
+            console.log(this.Data? this.Data.fan : -999);
+            return this.Data ? this.Data.fan == 100 : false;
+        },
+    }
+    ,
+    methods: {
+        notify(){
+            if (this.Data.temp > 35)
+            {
+                alert("You need to turn on the fan");
+            }
+            if (this.Data.humidity > 60)
+            {
+                alert("Humidity is above 60%");
+            }
+            if (this.Data.lightvalue > 75)
+            {
+                alert("Luminosity is above 75");
+            }
+        },
+        async getData() {
+            try {
+                const res = await axios.get("/record",
+                    { headers: { authorization: `Bearer ${localStorage.getItem("token")}` } });
+                this.Data = await res.data;
+                console.log(this.Data)
+            } catch (error) {
+                console.log(error);
+                this.$router.push("/unauthorized");
+            }
+
+        },
+        async switchLight(value) {
+            if (value === this.Data.light) {
+                alert("Light is already " + (value == 0 ? "off" : "on"));
+            }else{
+                this.Data.light = value;
+            await axios.post("/record/store", {
+                light: value
+            });
+            }
+        },
+        async switchFan(value) {
+            const val = this.Data.fan == 0 ? 100 : 0;
+            this.Data.fan = val;
+            console.log(val);
+            const res = await axios.post("/record/store", {
+                fan: val
+            });
+        },
+        startSpeechRecognition() {
+            this.isListening = true;
+            const recognition = new window.webkitSpeechRecognition() || new window.SpeechRecognition();
+            recognition.lang = 'vi-VN';
+            recognition.onresult = (event) => {
+                console.log("working")
+                this.recognizedText = event.results[0][0].transcript;
+                console.log(this.recognizedText);
+                // Processing logic moved inside onresult event handler
+                const enspeech = this.recognizedText.split(" ");
+                console.log(enspeech);
+                if (enspeech[0] == "bật") {
+                    console.log("turn");
+                    if (enspeech[1] == "on") {
+                        console.log("on");
+                        if (enspeech[3] == "đèn") {
+                            console.log("light");
+                            this.switchLight();
+                        } else if (enspeech[3] == "fan") {
+                            console.log("fan");
+                            this.switchFan();
+                        }
+                    } else if (enspeech[1] == "off") {
+                        console.log("off");
+                        if (enspeech[3] == "light") {
+                            console.log("light");
+                            this.switchLight();
+                        } else if (enspeech[3] == "fan") {
+                            console.log("fan");
+                            this.switchFan();
+                        }
+                    }
+                }
+            };
+            recognition.onend = () => {
+                this.isListening = false;
+            };
+            recognition.start();
+
+            //this.isListening = this.isListening === false ? true : false;
+
+>>>>>>> main
         }
       };
       recognition.onend = () => {
