@@ -48,7 +48,7 @@ async function addDataToAdafruit(Api, value) {
 exports.Statistics = async function (req, res) {
     try {
         const recordRef = collection(db, 'record');
-        const q = query(recordRef, orderBy('time', 'desc'), limit(5));
+        const q = query(recordRef, orderBy('time', 'desc'), limit(10));
         const records = await getDocs(q);
         const recordArray = [];
         if (records.empty) {
@@ -189,7 +189,7 @@ exports.Export = async function (req, res) {
                 });
                 const averages = {};
                 for (const date in sums) {
-                    
+
                     averages[date] = {
                         date: date,
                         avgTemperature: (sums[date].temp / counts[date]).toFixed(2),
@@ -200,9 +200,8 @@ exports.Export = async function (req, res) {
 
                 return averages;
             };
-
-            const avgdatas = avgdata(); 
-            
+            const avgdatas = avgdata();
+            console.log(avgdatas);
 
             // Create a worksheet from your data
             const ws = XLSX.utils.json_to_sheet(Object.values(avgdatas));
@@ -210,7 +209,7 @@ exports.Export = async function (req, res) {
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'Data');
             // Generate a temporary file path
-            const tempFilePath = '../temp.xlsx';
+            const tempFilePath = '/tmp/temp.xlsx';
 
             // Write the XLSX file to the temp path
             XLSX.writeFile(wb, tempFilePath);

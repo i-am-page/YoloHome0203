@@ -3,6 +3,7 @@ MobileApp/node_modules
 Server/node_modules
 WebClient/node_modules
 ReactNative/node_modules
+ReactNativeApp/node_modules
 
 # Ignore compiled files
 *.o
